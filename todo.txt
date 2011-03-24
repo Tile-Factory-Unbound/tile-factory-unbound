@@ -1,0 +1,52 @@
+----
+TODO
+----
+
+New Maps (Need ~40)
+Stamps
+Locks (Red Zones)
+Barriers impermiable inside locks
+Always-on Play tab
+Add a 'Super-fast-forward' button
+Hotkeys for tabs/parts
+Hotkey for play/stop
+Challenge badges
+Display time/part/item/breakage during play
+Integrate with a level management system
+Distinguish between solutions and levels. Dual-load all the time.
+Load levels/solutions using URLs
+Select square then move/delete
+New Parts: Breakpoint (pauses simulation when powered), Lever (click to toggle power while playing), Light Bulb (whole-tile power indicator), Random (on 50% of time when input is powered, off otherwise), Label (reveals custom text on mouseover)
+Show current wires on parts when mousing over or moving them even when not in wires mode
+Display wire count
+Translations to Spanish/French/German. Other languages?
+Allow larger window sizes
+Place any color paint
+Simulation continues even with victory screen up
+Track display issues
+Ungroup disconnected tiles when using solvent.
+Fix circular wires when either source or dest is mem.
+Show name when loading map/in menu/etc.
+
+-----
+MAYBE
+-----
+
+Story? Ideas?
+Allow loading of recent levels?
+Leaderboards?
+Limit number of pieces of each type?
+Rotation of entire mosaics? Problematic collision detection, animation.
+Create reversed wires?
+Comparison Part? A kind of sensor which turns on when all adjacent comparison parts have the same item on top of them.
+Can place items on top of other parts?
+Configuration library?
+Color-blind support?
+Toggle music/sound fx separately?
+Delete part on release of shift? Only after it has been used?
+
+----
+DONE
+----
+
+Drag Scrolling, hotkeys for scrolling
