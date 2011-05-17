@@ -207,19 +207,15 @@ package ui
       if ((left == WHITE && right == BLACK)
           || (left == BLACK && right == WHITE))
       {
-        result = 0x1;
+        result = 0xf;
       }
-      else if (left == WHITE)
+      else if (left == WHITE && right != WHITE)
       {
-        result = whiteTable[right];
+        result = right & 0xe;
       }
-      else if (left == BLACK)
+      else if (left != WHITE && right == WHITE)
       {
-        result = blackTable[right];
-      }
-      else if (right == WHITE || right == BLACK)
-      {
-        result = mix(right, left);
+        result = left & 0xe;
       }
       else
       {
@@ -229,21 +225,11 @@ package ui
     }
 
     static var WHITE = 0;
-    static var BLACK = 0xf;
-
-    static var whiteTable = [0x0, 0xe, 0x0, 0x2,
-                             0x0, 0x4, 0x0, 0x6,
-                             0x0, 0x8, 0x0, 0xa,
-                             0x0, 0xc, 0x0, 0x1];
-
-    static var blackTable = [0xe, 0xf, 0x3, 0xf,
-                             0x5, 0xf, 0x7, 0xf,
-                             0x9, 0xf, 0xb, 0xf,
-                             0xd, 0xf, 0x1, 0xf];
+    static var BLACK = 0x1;
 
     static var stencilColor = 0x9d5148; //0x808000;
     static var colorMap = [0xffffff, // White
-                           0x555555, // Dark Grey
+                           0x000000, // Black
                            0xffff55, // Light Yellow
                            0xaa5500, // Brown
                            0xff55ff, // Light Magenta
@@ -257,7 +243,7 @@ package ui
                            0x5555ff, // Light Blue
                            0x0000aa, // Blue
                            0xaaaaaa, // Light Grey
-                           0x000000]; // Black
+                           0x555555]; // Dark Grey
 
     public static var stencils = [0xffaa0055, 0xffff0000, 0x03000000,
                                   0x0f000000, 0x3f000000];

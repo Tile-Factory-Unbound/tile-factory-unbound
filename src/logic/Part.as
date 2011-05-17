@@ -46,7 +46,7 @@ package logic
     public static var BLACK = 25;
     public static var PAINT_END = 26;
 
-    static var paintType = [0x0, 0x8, 0x4, 0x2, 0xf];
+    static var paintType = [0x0, 0x8, 0x4, 0x2, 0x1];
 
     public static function isItem(type : int) : Boolean
     {
