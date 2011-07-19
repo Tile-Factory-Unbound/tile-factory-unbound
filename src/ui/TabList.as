@@ -54,6 +54,16 @@ package ui
       menuList.cleanup();
     }
 
+    public function resize() : void
+    {
+      for each (var current in [buttonMenu, editMenu, placeMenu, goalMenu,
+                                tileMenu, victoryMenu, partMenu, itemMenu,
+                                wireMenu, testMenu, colorLabMenu, tileLabMenu])
+      {
+        current.resize();
+      }
+    }
+
     public function setModel(settings : GameSettings,
                              changes : lib.ChangeList,
                              map : logic.Map,

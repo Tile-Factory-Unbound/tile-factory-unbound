@@ -39,12 +39,17 @@ package logic.change
 
     public static function slowPlay(model : Model, view : View) : void
     {
-      model.slow();
+      model.setSlow();
     }
 
-    public static function speedPlay(model : Model, view : View) : void
+    public static function fastPlay(model : Model, view : View) : void
     {
-      model.speed();
+      model.setFast();
+    }
+
+    public static function turboPlay(model : Model, view : View) : void
+    {
+      model.setTurbo();
     }
 
     public static function stepPlay(model : Model, view : View) : void

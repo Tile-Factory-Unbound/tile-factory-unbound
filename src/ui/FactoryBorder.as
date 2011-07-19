@@ -38,6 +38,8 @@ package ui
       clip.graphics.drawRect(-5*32, -5*32, 11*32, 11*32);
       clip.scale9Grid = new Rectangle(0, 0, 32, 32);
       clip.addEventListener(MouseEvent.MOUSE_MOVE, mouseMove);
+      clip.x = - Map.tileSize;
+      clip.y = - Map.tileSize;
     }
 
     public function setModel(newVertical : Array, newHorizontal : Array,
@@ -70,8 +72,8 @@ package ui
     override public function update(offset : Point, screen : Point,
                                     size : Point, windowSize : Point) : void
     {
-      clip.x = -offset.x + screen.x - Map.tileSize;
-      clip.y = -offset.y + screen.y - Map.tileSize;
+//      clip.x = -offset.x + screen.x - Map.tileSize;
+//      clip.y = -offset.y + screen.y - Map.tileSize;
       border.scaleX = size.x / Map.tileSize + 2;
       border.scaleY = size.y / Map.tileSize + 2;
       for each (var southClip in south)

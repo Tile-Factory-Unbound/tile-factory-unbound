@@ -154,7 +154,7 @@ package ui.menu
         {
           changes.add(Util.makeChange(ChangeWorld.resumePlay));
         }
-        changes.add(Util.makeChange(ChangeWorld.speedPlay));
+        changes.add(Util.makeChange(ChangeWorld.fastPlay));
         setState(FAST);
       }
       else if (choice == PAUSE)

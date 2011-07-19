@@ -49,6 +49,11 @@ package ui.menu
       super.cleanup();
     }
 
+    override public function resize() : void
+    {
+      Screen.centerX(clip, null);
+    }
+
     static var flashList = [1.0, 1.1, 1.2, 1.3, 1.2, 1.1];
 
     public function enterFrame() : void
@@ -79,6 +84,7 @@ package ui.menu
     function setText() : void
     {
       clip.visible = true;
+/*
       window.setScreenOffset(new Point(0, 100));
       if (settings.isMovie())
       {
@@ -89,6 +95,7 @@ package ui.menu
         window.resizeWindow(new Point(Main.WIDTH,
                                       Main.HEIGHT - View.MENU_HEIGHT));
       }
+*/
       clip.prev.visible = !(slide == 0 && settings.getPrev() == null);
       clip.next.visible = !(slide == settings.getSlides().length - 1
                             && ! settings.isMovie());
@@ -111,7 +118,7 @@ package ui.menu
         else
         {
           clip.visible = false;
-          window.setScreenOffset(new Point(0, 0));
+//          window.setScreenOffset(new Point(0, 0));
         }
       }
       else

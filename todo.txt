@@ -3,7 +3,7 @@ TODO
 ----
 
 New Maps (Need ~40)
-Stamps
+Pixel-based stencils, flip, invert
 Locks (Red Zones)
 Barriers impermiable inside locks
 Always-on Play tab
@@ -20,13 +20,13 @@ New Parts: Breakpoint (pauses simulation when powered), Lever (click to toggle p
 Show current wires on parts when mousing over or moving them even when not in wires mode
 Display wire count
 Translations to Spanish/French/German. Other languages?
-Allow larger window sizes
 Place any color paint
 Simulation continues even with victory screen up
 Track display issues
 Ungroup disconnected tiles when using solvent.
 Fix circular wires when either source or dest is mem.
 Show name when loading map/in menu/etc.
+Fix ordering
 
 -----
 MAYBE
@@ -50,3 +50,6 @@ DONE
 ----
 
 Drag Scrolling, hotkeys for scrolling
+New Color System
+Allow larger window sizes
+

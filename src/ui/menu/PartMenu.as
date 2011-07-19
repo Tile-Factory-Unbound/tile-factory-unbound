@@ -68,16 +68,16 @@ package ui.menu
     function mouseOver(index : int) : void
     {
       buttons.glowOver(index);
-      tip.x = buttons.get(index).x;
+      tip.x = buttons.get(index).x + clip.x;
       if (tip.x < tip.width / 2 + 10)
       {
-        tip.x = tip.width / 2 + 10;
+        tip.x = tip.width / 2 + 10 + clip.x;
       }
       if (tip.x > Main.WIDTH - tip.width / 2 - 10)
       {
-        tip.x = Main.WIDTH - tip.width / 2 - 10;
+        tip.x = Main.WIDTH - tip.width / 2 - 10 + clip.x;
       }
-      tip.y = buttons.get(index).y;
+      tip.y = buttons.get(index).y + clip.y;
       tip.visible = true;
       tip.barText.text = partTitles[index];
       tip.blurb.text = partBlurbs[index];

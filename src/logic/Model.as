@@ -26,6 +26,7 @@ package logic
       specs = new Array();
       isPlay = false;
       fast = false;
+      turbo = false;
       paused = false;
       stepping = false;
       delay = DELAY_MAX;
@@ -77,17 +78,18 @@ package logic
     public function enterFrame() : void
     {
       step();
-      if (fast)
+      if (fast || turbo)
       {
         step();
-/*
-        step();
-        step();
-        step();
-        step();
-        step();
-        step();
-*/
+        if (turbo)
+        {
+          step();
+          step();
+          step();
+          step();
+          step();
+          step();
+        }
       }
     }
 
@@ -376,6 +378,7 @@ package logic
         paused = false;
         stepping = false;
         fast = false;
+        turbo = false;
         delay = DELAY_MAX - 1;
         for each (var part in parts)
         {
@@ -424,6 +427,7 @@ package logic
       paused = true;
       stepping = true;
       fast = false;
+      turbo = false;
     }
 
     public function resume() : void
@@ -435,16 +439,25 @@ package logic
     {
       stepping = true;
       fast = false;
+      turbo = false;
     }
 
-    public function slow() : void
+    public function setSlow() : void
     {
       fast = false;
+      turbo = false;
     }
 
-    public function speed() : void
+    public function setFast() : void
     {
       fast = true;
+      turbo = false;
+    }
+
+    public function setTurbo() : void
+    {
+      fast = true;
+      turbo = true;
     }
 
     public function getMap() : Map
@@ -527,6 +540,7 @@ package logic
     var paused : Boolean;
     var stepping : Boolean;
     var fast : Boolean;
+    var turbo : Boolean;
     var stepCount : int;
 
     public static var MOVE_FRAMES : int = 8;

@@ -306,25 +306,34 @@ package ui
           var mapPos = Map.toTile(pos);
           var center = Map.toCenterPixel(mapPos);
           var relPos = window.toRelative(center);
-          plan.x = relPos.x;
-          plan.y = relPos.y;
-          if (map.canPlacePart(mapPos)
-              || (map.insideMap(mapPos)
-                  && map.getTile(mapPos).part == moveTarget))
+          if (map.insideMap(mapPos))
           {
-            if (overlayState != OK_OVERLAY)
+            plan.x = relPos.x;
+            plan.y = relPos.y;
+            if (map.canPlacePart(mapPos)
+                || map.getTile(mapPos).part == moveTarget)
             {
-              overlayState = OK_OVERLAY;
-              drawColorBox(okColor);
+              if (overlayState != OK_OVERLAY)
+              {
+                overlayState = OK_OVERLAY;
+                drawColorBox(okColor);
+              }
+            }
+            else
+            {
+              if (overlayState != BAD_OVERLAY)
+              {
+                overlayState = BAD_OVERLAY;
+                drawColorBox(badColor);
+              }
             }
           }
           else
           {
-            if (overlayState != BAD_OVERLAY)
-            {
-              overlayState = BAD_OVERLAY;
-              drawColorBox(badColor);
-            }
+            plan.x = window.toRelative(pos).x;
+            plan.y = window.toRelative(pos).y;
+            overlayState = NO_OVERLAY;
+            overlay.graphics.clear();
           }
         }
       }

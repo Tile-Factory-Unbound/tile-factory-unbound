@@ -48,6 +48,11 @@ package
       parent.removeEventListener(Event.ENTER_FRAME, enterFrame);
     }
 
+    public function resize(stageX : int, stageY : int) : void
+    {
+      view.resize();
+    }
+
     public function endGame(newState : int) : void
     {
       state = newState;

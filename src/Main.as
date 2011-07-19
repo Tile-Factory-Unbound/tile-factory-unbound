@@ -1,6 +1,10 @@
 package
 {
   import flash.display.DisplayObjectContainer;
+  import flash.display.StageAlign;
+  import flash.display.StageScaleMode;
+  import flash.events.Event;
+  import flash.events.FullScreenEvent;
   import lib.Point;
   import lib.ui.Keyboard;
   import ui.RegionList;
@@ -19,6 +23,13 @@ package
 //      if (url.indexOf("armorgames.com") != -1)
 //      if (url.indexOf("kongregate.com") != -1)
       {
+        var stage = parent.stage;
+        stage.scaleMode = StageScaleMode.NO_SCALE;
+        stage.align = StageAlign.TOP_LEFT;
+        stage.addEventListener(FullScreenEvent.FULL_SCREEN,
+                               fullScreenHandler);
+        stage.addEventListener(Event.RESIZE,
+                               resizeHandler);
         Campaign.init();
         Sound.playMusic();
         root = parent;
@@ -26,6 +37,7 @@ package
         ui.RegionList.setupRegions();
         settings = new GameSettings(new lib.Point(25, 25));
         state = new MainMenu(root, settings, beginGame, keyboard);
+        resize();
       }
     }
 
@@ -33,6 +45,7 @@ package
     {
       state.cleanup();
       state = new Game(root, keyboard, settings, endGame);
+      resize();
     }
 
     static function endGame(shouldSelectLevel : Boolean) : void
@@ -45,6 +58,22 @@ package
       {
         menu.selectLevel();
       }
+      resize();
+    }
+
+    static function fullScreenHandler(event : FullScreenEvent) : void
+    {
+      resize();
+    }
+
+    static function resizeHandler(event : Event) : void
+    {
+      resize();
+    }
+
+    static function resize() : void
+    {
+      state.resize(root.stage.stageWidth, root.stage.stageHeight);
     }
 
     static var root : DisplayObjectContainer;

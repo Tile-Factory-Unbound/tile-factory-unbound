@@ -85,13 +85,23 @@ package
       menu.parent.removeChild(menu);
     }
 
+    public function resize(stageX : int, stageY : int) : void
+    {
+      Screen.center(menu.start, Screen.size);
+      Screen.center(menu.paste, Screen.size);
+      Screen.center(menu.credits, Screen.size);
+      Screen.stretch(menu.bg);
+      Screen.stretch(menu.arrows);
+      levelMenu.resize();
+    }
+
     function moveArrows(event : Event) : void
     {
-      if (menu.start.arrows.y <= -600)
+      if (menu.arrows.y <= -(menu.arrows.height/2))
       {
-        menu.start.arrows.y = 0;
+        menu.arrows.y = 0;
       }
-      menu.start.arrows.y -= 0.5;
+      menu.arrows.y -= 0.5;
     }
 
     function clearLevelMenu() : void
@@ -99,6 +109,7 @@ package
       levelMenu.cleanup();
       levelMenu = new LevelMenu(parent, settings, beginGame, clearLevelMenu,
                                 changeIsland, keyboard);
+      menu.start.visible = true;
     }
 
     function changeIsland() : void
@@ -118,6 +129,9 @@ package
       {
         levelMenu.startMain();
       }
+      menu.start.visible = false;
+      menu.paste.visible = false;
+      menu.credits.visible = false;
     }
 
     static var PLAY_GAME = 0;

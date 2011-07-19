@@ -66,6 +66,16 @@ package
       images.cleanup();
     }
 
+    public function resize() : void
+    {
+      if (clip != null && window != null)
+      {
+        window.resizeWindow(new Point(clip.stage.stageWidth,
+                                      clip.stage.stageHeight));
+        Screen.bottom(overlay, null);
+      }
+    }
+
     function resetWindow(backgroundSize : Point) : void
     {
       clip.addEventListener(Event.ENTER_FRAME, enterFrame);
@@ -96,6 +106,7 @@ package
       unlock(tutorialBase);
       start(new Point(Main.WIDTH, Main.HEIGHT));
       scrollMenu.hide();
+      resize();
     }
 
     public function startMain() : void
@@ -109,6 +120,7 @@ package
       levelIds = mainIds;
       unlock(mainBase);
       start(new Point(1600, 1200));
+      resize();
     }
 
     function start(backgroundSize : Point) : void

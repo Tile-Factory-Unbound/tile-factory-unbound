@@ -16,6 +16,12 @@ package ui.menu
       {
         top.muteButton.gotoAndStop(2);
       }
+      back = new BackgroundClip();
+      parent.addChild(back);
+      back.visible = false;
+      arrows = new ArrowBackgroundClip();
+      parent.addChild(arrows);
+      arrows.visible = false;
       system = new SystemMenuClip();
       parent.addChild(system);
       system.visible = false;
@@ -46,8 +52,18 @@ package ui.menu
       system.removeEventListener(Event.ENTER_FRAME, enterFrame);
       buttonsSystem.cleanup();
       buttonsTop.cleanup();
-      top.parent.removeChild(top);
       system.parent.removeChild(system);
+      arrows.parent.removeChild(arrows);
+      back.parent.removeChild(back);
+      top.parent.removeChild(top);
+    }
+
+    public function resize() : void
+    {
+      Screen.center(system, null);
+      Screen.center(save, null);
+      Screen.stretch(back);
+      Screen.stretch(arrows);
     }
 
     public function setModel(newEndGame : Function,
@@ -96,6 +112,7 @@ package ui.menu
       }
       else if (choice == SAVE)
       {
+        system.visible = false;
         save.visible = true;
         save.code.text = saveMap();
         save.stage.focus = save.code;
@@ -130,6 +147,7 @@ package ui.menu
       else if (choice == BACK)
       {
         save.visible = false;
+        system.visible = true;
       }
       Sound.play(Sound.SELECT);
     }
@@ -150,26 +168,32 @@ package ui.menu
 
     function enterFrame(event : Event) : void
     {
-      if (system.arrows.y <= -600)
+      if (arrows.y <= -(arrows.height/2))
       {
-        system.arrows.y = 0;
+        arrows.y = 0;
       }
-      system.arrows.y -= 0.5;
+      arrows.y -= 0.5;
     }
 
     function show() : void
     {
       system.visible = true;
+      arrows.visible = true;
+      back.visible = true;
       system.addEventListener(Event.ENTER_FRAME, enterFrame);
     }
 
     function hide() : void
     {
       system.visible = false;
+      arrows.visible = false;
+      back.visible = false;
       system.removeEventListener(Event.ENTER_FRAME, enterFrame);
     }
 
     var top : TopMenuClip;
+    var back : BackgroundClip;
+    var arrows : ArrowBackgroundClip;
     var system : SystemMenuClip;
     var save : SaveMenuClip;
     var buttonsTop : lib.ui.ButtonList;

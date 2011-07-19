@@ -30,6 +30,12 @@ package ui.menu
       super.cleanup();
     }
 
+    override public function resize() : void
+    {
+      Screen.centerX(rootClip, null);
+      Screen.bottom(rootClip, null);
+    }
+
     override public function show() : void
     {
       rootClip.parent.setChildIndex(rootClip, rootClip.parent.numChildren - 1);

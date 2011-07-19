@@ -16,7 +16,6 @@ package ui
   import ui.menu.ButtonMenu;
   import ui.menu.EditMenu;
   import ui.menu.GoalMenu;
-  import ui.menu.PlaceMenu;
   import ui.menu.TileMenu;
   import ui.menu.VictoryMenu;
   import ui.menu.PartMenu;
@@ -36,12 +35,15 @@ package ui
       anims = new AnimList();
       border = new FactoryBorder(FactoryBorder.GRASS);
       window = new lib.ui.Window(parent,
+                                 Screen.size,
+/*
                                  new Point(Main.WIDTH,
-                                           Main.HEIGHT - MENU_HEIGHT),
+                                 Main.HEIGHT - MENU_HEIGHT),*/
                                  backgroundSize, ImageConfig.layerCount,
                                  images, border, new WindowBackgroundClip(),
-                                 100);
-      window.scrollWindow(window.getCenter());
+                                 200);
+      window.setCenter(new Point(backgroundSize.x/2,
+                                 backgroundSize.y/2));
       wirePlace = new WirePlace(parent, keyboard, window);
       wireParent = new WireParent(parent, window);
       wireParent.hide();
@@ -74,6 +76,15 @@ package ui
       partPlace.cleanup();
       window.cleanup();
       images.cleanup();
+    }
+
+    public function resize() : void
+    {
+      tabs.resize();
+      window.resizeWindow(new Point(parent.stage.stageWidth,
+                                    parent.stage.stageHeight));
+      movieMenu.resize();
+      systemMenu.resize();
     }
 
     public function enterFrame() : void

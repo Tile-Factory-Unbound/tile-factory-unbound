@@ -35,6 +35,12 @@ package ui.menu
       super.cleanup();
     }
 
+    override public function resize() : void
+    {
+      Screen.centerX(clip, null);
+      Screen.bottom(clip, null);
+    }
+
     override public function show() : void
     {
       super.show();

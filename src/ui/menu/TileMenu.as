@@ -106,6 +106,12 @@ package ui.menu
       super.cleanup();
     }
 
+    override public function resize() : void
+    {
+      super.resize();
+      Screen.right(side, null);
+    }
+
     public function setModel(newPartPlace : PartPlace,
                              buttonStatus : ButtonStatus) : void
     {
@@ -127,8 +133,10 @@ package ui.menu
       {
         updateTile();
         updateTest();
+/*
         window.resizeWindow(new Point(Main.WIDTH - 200,
                                       Main.HEIGHT - View.MENU_HEIGHT));
+*/
         side.visible = true;
         var goal = goalPlace.getGoalOffset();
         window.setOffset(Map.toPixel(new Point(goal.x - 1, goal.y - 1)));
