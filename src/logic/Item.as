@@ -8,6 +8,7 @@ package logic
 
   import ui.ItemView;
   import ui.RegionList;
+  import ui.TilePixel;
 
   public class Item
   {
@@ -46,7 +47,7 @@ package logic
         sprite.normalSize();
       }
 
-      color = new RegionList();
+      color = new TilePixel();
       if (isTile())
       {
         sprite.updateColor(color);
@@ -61,7 +62,9 @@ package logic
       }
       else if (isStencil())
       {
-        color.addStencil(RegionList.stencils[type - STENCIL_BEGIN]);
+        var stencil = new RegionList();
+        stencil.addStencil(RegionList.stencils[type - STENCIL_BEGIN]);
+        color.convertFrom(stencil);
       }
     }
 
@@ -96,9 +99,9 @@ package logic
       return group;
     }
 
-    public function hasColor(other : RegionList) : Boolean
+    public function hasColor(other : TilePixel) : Boolean
     {
-      return isTile() && RegionList.isEqual(color, other);
+      return isTile() && TilePixel.isEqual(color, other);
     }
 
     public function push(newDir : Dir, changes : lib.ChangeList) : void
@@ -243,12 +246,12 @@ package logic
       }
     }
 
-    public function getColor() : ui.RegionList
+    public function getColor() : TilePixel
     {
       return color;
     }
 
-    public function setColor(newColor : ui.RegionList) : void
+    public function setColor(newColor : TilePixel) : void
     {
       if (isTile())
       {
@@ -374,7 +377,7 @@ package logic
     var isGrowing : Boolean;
     var isStart : Boolean;
 
-    var color : ui.RegionList;
+    var color : TilePixel;
     var dir : Dir;
   }
 }

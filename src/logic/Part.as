@@ -391,11 +391,12 @@ package logic
       }
     }
 
-    public function powerChildren(map : Map, roots : Array) : void
+    public function powerChildren(map : Map, roots : Array,
+                                  updatePower : Boolean) : void
     {
       for each (var wire in outputs)
       {
-        var next = wire.sendPower(map, power);
+        var next = wire.sendPower(map, power, updatePower);
         if (next != null)
         {
           roots.push(next);

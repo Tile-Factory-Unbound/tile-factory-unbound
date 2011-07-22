@@ -17,15 +17,18 @@ package ui
   import logic.PartSpec;
 
   import logic.change.ChangePart;
+  import ui.menu.TestMenu;
 
   public class PartPlace
   {
     public function PartPlace(newParent : DisplayObjectContainer,
                               newKeyboard : lib.ui.Keyboard,
-                              newWindow : lib.ui.Window) : void
+                              newWindow : lib.ui.Window,
+                              newTestMenu : TestMenu) : void
     {
       parent = newParent;
       keyboard = newKeyboard;
+      testMenu = newTestMenu;
       part = new PartSpec(0, new Point(0, 0), Dir.north, true);
       plan = null;
       overlay = null;
@@ -207,6 +210,7 @@ package ui
           moveTarget.removeAllTracks();
           setMenu(TabList.PLACE_MENU);
           Sound.play(Sound.MOUSE_OVER);
+          testMenu.hide();
         }
         else
         {
@@ -237,6 +241,7 @@ package ui
         cleanupPlan();
         setMenu(TabList.PART_MENU);
         Sound.play(Sound.MOUSE_OVER);
+        testMenu.show();
       }
       else
       {
@@ -258,6 +263,7 @@ package ui
           cleanupPlan();
         }
         Sound.play(Sound.MOUSE_OVER);
+        testMenu.show();
       }
       else
       {
@@ -373,6 +379,7 @@ package ui
     public function setPart(newPart : int) : void
     {
       cleanupMove();
+      testMenu.hide();
       part.type = newPart;
       part.dir = Dir.east;
       if (Part.canPower(part.type))
@@ -470,11 +477,13 @@ package ui
       cleanupPlan();
       cleanupMove();
       shouldMove = false;
+      testMenu.show();
     }
 
     var parent : DisplayObjectContainer;
     var keyboard : lib.ui.Keyboard;
     var window : lib.ui.Window;
+    var testMenu : TestMenu;
     var isEditor : Boolean;
     var plan : MovieClip;
     var overlay : Shape;

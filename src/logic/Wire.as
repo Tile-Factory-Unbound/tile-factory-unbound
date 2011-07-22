@@ -21,7 +21,8 @@ package logic
       sprite.cleanup();
     }
 
-    public function sendPower(map : Map, power : Boolean) : Part
+    public function sendPower(map : Map, power : Boolean,
+                              updatePower : Boolean) : Part
     {
       var result = null;
       var cell = map.getTile(dest);
@@ -33,13 +34,16 @@ package logic
           result = cell.part;
         }
       }
-      if (power)
+      if (updatePower)
       {
-        sprite.show();
-      }
-      else
-      {
-        sprite.hide();
+        if (power)
+        {
+          sprite.show();
+        }
+        else
+        {
+          sprite.hide();
+        }
       }
       return result;
     }

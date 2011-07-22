@@ -48,7 +48,7 @@ package
       parent.removeEventListener(Event.ENTER_FRAME, enterFrame);
     }
 
-    public function resize(stageX : int, stageY : int) : void
+    public function resize() : void
     {
       view.resize();
     }
@@ -140,6 +140,7 @@ package
         }
         cleanup();
         init(nextSettings);
+        resize();
       }
       else
       {

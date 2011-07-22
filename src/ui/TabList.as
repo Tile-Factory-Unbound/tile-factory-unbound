@@ -16,7 +16,6 @@ package ui
   import ui.menu.PartMenu;
   import ui.menu.ItemMenu;
   import ui.menu.WireMenu;
-  import ui.menu.TestMenu;
 
   public class TabList
   {
@@ -38,14 +37,13 @@ package ui
       partMenu = new PartMenu(clip, setMenu, goalPlace);
       itemMenu = new ItemMenu(clip, setMenu, goalPlace);
       wireMenu = new WireMenu(clip, setMenu, wirePlace, wireParent, goalPlace);
-      testMenu = new TestMenu(clip, setMenu, goalPlace);
       colorLabMenu = new TileMenu(clip, window, goalPlace, setMenu,
                                   TileMenu.COLOR_LAB);
       tileLabMenu = new TileMenu(clip, window, goalPlace, setMenu,
                                  TileMenu.TILE_LAB);
       menuList = new MenuList([buttonMenu, editMenu, placeMenu, goalMenu,
                                tileMenu, victoryMenu, partMenu, itemMenu,
-                               wireMenu, testMenu, colorLabMenu, tileLabMenu]);
+                               wireMenu, colorLabMenu, tileLabMenu]);
     }
 
     public function cleanup() : void
@@ -58,7 +56,7 @@ package ui
     {
       for each (var current in [buttonMenu, editMenu, placeMenu, goalMenu,
                                 tileMenu, victoryMenu, partMenu, itemMenu,
-                                wireMenu, testMenu, colorLabMenu, tileLabMenu])
+                                wireMenu, colorLabMenu, tileLabMenu])
       {
         current.resize();
       }
@@ -87,7 +85,6 @@ package ui
       victoryMenu.setModel(settings, endGame, partPlace,
                            countParts, countSteps, countCreated, countBroken);
       wireMenu.setModel(partPlace, settings.getButtonStatus());
-      testMenu.setModel(changes, partPlace, settings, saveMap);
       goalMenu.setModel(partPlace);
       tileMenu.setModel(partPlace, settings.getButtonStatus());
       colorLabMenu.setModel(partPlace, settings.getButtonStatus());
@@ -99,7 +96,7 @@ package ui
       }
       if (settings.isEditor())
       {
-        setupTabs([partMenu, itemMenu, wireMenu, testMenu,
+        setupTabs([partMenu, itemMenu, wireMenu,
                    editMenu, buttonMenu, goalMenu, tileMenu]);
         for each (var player in [colorLabMenu, tileLabMenu, victoryMenu])
         {
@@ -108,7 +105,7 @@ package ui
       }
       else
       {
-        setupTabs([partMenu, itemMenu, wireMenu, testMenu,
+        setupTabs([partMenu, itemMenu, wireMenu,
                    colorLabMenu, tileLabMenu, victoryMenu]);
         for each (var editor in [editMenu, buttonMenu, goalMenu, tileMenu])
         {
@@ -153,6 +150,16 @@ package ui
       return wireMenu.getWireText();
     }
 
+    public function hide() : void
+    {
+      clip.visible = false;
+    }
+
+    public function show() : void
+    {
+      clip.visible = true;
+    }
+
     var clip : flash.display.Sprite;
 
     var menuList : lib.ui.MenuList;
@@ -165,7 +172,6 @@ package ui
     var partMenu : ui.menu.PartMenu;
     var itemMenu : ui.menu.ItemMenu;
     var wireMenu : ui.menu.WireMenu;
-    var testMenu : ui.menu.TestMenu;
     var colorLabMenu : ui.menu.TileMenu;
     var tileLabMenu : ui.menu.TileMenu;
 
@@ -178,12 +184,11 @@ package ui
     public static var PART_MENU = 6;
     public static var ITEM_MENU = 7;
     public static var WIRE_MENU = 8;
-    public static var TEST_MENU = 9;
-    public static var COLOR_LAB_MENU = 10;
-    public static var TILE_LAB_MENU = 11;
+    public static var COLOR_LAB_MENU = 9;
+    public static var TILE_LAB_MENU = 10;
 
     public static var tabText = ["Buttons", "Map", "Place", "Goal", "Tile",
-                                 "Victory", "Parts", "Items", "Wires", "Test",
+                                 "Victory", "Parts", "Items", "Wires",
                                  "Dye Lab", "Tile Lab"];
   }
 }

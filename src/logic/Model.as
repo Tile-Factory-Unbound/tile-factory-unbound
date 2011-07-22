@@ -264,7 +264,7 @@ package logic
       while (roots.length > 0)
       {
         var next = roots.pop();
-        next.powerChildren(map, roots);
+        next.powerChildren(map, roots, !(fast || turbo));
       }
     }
 
@@ -428,6 +428,7 @@ package logic
       stepping = true;
       fast = false;
       turbo = false;
+      view.showWires();
     }
 
     public function resume() : void
@@ -440,24 +441,28 @@ package logic
       stepping = true;
       fast = false;
       turbo = false;
+      view.showWires();
     }
 
     public function setSlow() : void
     {
       fast = false;
       turbo = false;
+      view.showWires();
     }
 
     public function setFast() : void
     {
       fast = true;
       turbo = false;
+      view.hideWires();
     }
 
     public function setTurbo() : void
     {
       fast = true;
       turbo = true;
+      view.hideWires();
     }
 
     public function getMap() : Map

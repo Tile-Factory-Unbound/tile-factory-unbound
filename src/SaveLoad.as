@@ -10,6 +10,7 @@ package
   import logic.WireSpec;
   import logic.GoalSpec;
   import ui.RegionList;
+  import ui.TilePixel;
 
   public class SaveLoad
   {
@@ -59,7 +60,7 @@ package
       }
       loadParts(stream, parts, buttonStatus, loadType);
       loadWires(stream, wires, loadType);
-      loadGoals(stream, goals, loadType);
+      loadGoals(stream, goals, loadType, version);
       if (version > 0)
       {
         var newStatus = stream.readUnsignedInt();
@@ -171,7 +172,7 @@ package
     }
 
     static function loadGoals(stream : ByteArray, goals : Array,
-                              loadType : int) : void
+                              loadType : int, version : int) : void
     {
       var count = stream.readUnsignedByte();
       var i = 0;
@@ -191,14 +192,36 @@ package
         }
         for (j = 0; j < tileCount; ++j)
         {
-          var cyan = stream.readUnsignedInt();
-          var magenta = stream.readUnsignedInt();
-          var yellow = stream.readUnsignedInt();
-          var absorb = stream.readUnsignedInt();
-          var stencil = stream.readUnsignedInt();
-          var color = new ui.RegionList();
-          color.reset(cyan, magenta, yellow, absorb, stencil);
-          current.color.push(color);
+          var pixelColor = new TilePixel();
+          if (version <= 1)
+          {
+            var cyan = stream.readUnsignedInt();
+            var magenta = stream.readUnsignedInt();
+            var yellow = stream.readUnsignedInt();
+            var absorb = stream.readUnsignedInt();
+            var stencil = stream.readUnsignedInt();
+            var color = new ui.RegionList();
+            color.reset(cyan, magenta, yellow, absorb, stencil);
+            var k = 0;
+            for (; k < 32; ++k)
+            {
+              var currentColor = color.getColor(k);
+              if (currentColor == 0xf)
+              {
+                color.setColor(k, 0x1);
+              }
+              else if (currentColor == 0x1)
+              {
+                color.setColor(k, 0xf);
+              }
+            }
+            pixelColor.convertFrom(color);
+          }
+          else
+          {
+            pixelColor.load(stream);
+          }
+          current.color.push(pixelColor);
         }
         if (loadType == LOAD_ALL || loadType == LOAD_LEVEL)
         {
@@ -275,6 +298,6 @@ package
       stream.writeByte(pos.y);
     }
 
-    static var CURRENT_VERSION = 1;
+    static var CURRENT_VERSION = 2;
   }
 }

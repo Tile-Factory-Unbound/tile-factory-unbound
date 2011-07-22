@@ -8,7 +8,7 @@ package logic.change
   import logic.Model;
 
   import ui.ItemView;
-  import ui.RegionList;
+  import ui.TilePixel;
   import ui.View;
 
   public class ChangeItem
@@ -65,7 +65,7 @@ package logic.change
       }
     }
 
-    public static function setColor(pos : Point, color : ui.RegionList,
+    public static function setColor(pos : Point, color : TilePixel,
                                     model : Model, view : View) : void
     {
       var cell = model.getMap().getTile(pos);

@@ -53,7 +53,7 @@ package ui
       back.visible = false;
     }
 
-    public function startPlay() : void
+    public function showPlay() : void
     {
       var i = 0;
       for (; i < parent.numChildren; ++i)
@@ -64,7 +64,7 @@ package ui
       back.visible = false;
     }
 
-    public function stopPlay() : void
+    public function hidePlay() : void
     {
       if (back.visible == false)
       {

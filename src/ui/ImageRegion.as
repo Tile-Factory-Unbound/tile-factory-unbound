@@ -1,6 +1,7 @@
 package ui
 {
-  import flash.display.Shape;
+  import flash.display.Bitmap;
+  import flash.display.BitmapData;
 
   import lib.ui.Image;
   import lib.ui.ImageType;
@@ -14,10 +15,11 @@ package ui
     {
       region = null;
       regionClip = null;
+      data = null;
       super(newType);
     }
 
-    public function setRegion(newRegion : RegionList) : void
+    public function setRegion(newRegion : TilePixel) : void
     {
       if (region == null && newRegion != null)
       {
@@ -29,7 +31,7 @@ package ui
         region = null;
         regionChanged = true;
       }
-      else if (! RegionList.isEqual(region, newRegion))
+      else if (! TilePixel.isEqual(region, newRegion))
       {
         region.copyFrom(newRegion);
         regionChanged = true;
@@ -46,11 +48,9 @@ package ui
     {
       if (regionChanged && image != null && regionClip != null)
       {
-        regionClip.graphics.clear();
         if (region != null)
         {
-          region.drawRegions(regionClip.graphics, -(Map.tileSize - 2)/2,
-                             Map.tileSize - 2)
+          region.drawRegions(regionClip.bitmapData);
         }
       }
       regionChanged = false;
@@ -62,25 +62,35 @@ package ui
       {
         super.updateFrame();
         regionClip.parent.removeChild(regionClip);
-        image.addChild(regionClip);
+        if (frame == 1)
+        {
+          image.addChild(regionClip);
+        }
       }
     }
 
     override protected function resetImage(window : Window) : void
     {
       super.resetImage(window);
-      regionClip = new Shape();
+      data = new BitmapData(TileBit.dim, TileBit.dim, false);
+      regionClip = new Bitmap(data);
+      regionClip.x = -(TileBit.dim/2);
+      regionClip.y = -(TileBit.dim/2);
       image.addChild(regionClip);
-      regionClip.cacheAsBitmap = true;
     }
 
     override protected function clearImage() : void
     {
       if (regionClip != null)
       {
-        regionClip.parent.removeChild(regionClip);
+        if (regionClip.parent != null)
+        {
+          regionClip.parent.removeChild(regionClip);
+        }
+        data.dispose();
       }
       regionClip = null;
+      data = null;
       super.clearImage();
     }
 
@@ -90,8 +100,9 @@ package ui
       regionChanged = true;
     }
 
-    var region : RegionList;
+    var region : TilePixel;
     var regionChanged : Boolean;
-    var regionClip : Shape;
+    var regionClip : Bitmap;
+    var data : BitmapData;
   }
 }

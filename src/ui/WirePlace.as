@@ -171,7 +171,11 @@ package ui
       else if (pos != null && plan != null)
       {
         mapPos = Map.toTile(pos);
-        var part = map.getTile(mapPos).part;
+        var part = null;
+        if (map.insideMap(mapPos))
+        {
+          part = map.getTile(mapPos).part;
+        }
         if (part != null && ! part.canWire())
         {
           part = null;

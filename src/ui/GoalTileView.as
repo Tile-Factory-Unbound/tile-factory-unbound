@@ -26,7 +26,7 @@ package ui
       tile.setPos(Map.toCenterPixel(pos));
     }
 
-    public function updateColor(color : RegionList) : void
+    public function updateColor(color : TilePixel) : void
     {
       tile.setRegion(color);
     }

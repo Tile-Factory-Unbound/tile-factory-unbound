@@ -58,5 +58,16 @@ package
       clip.scaleX = clip.stage.stageWidth/800;
       clip.scaleY = clip.stage.stageHeight/600;
     }
+
+    public static function stretchSquare(clip : DisplayObject,
+                                         min : Number, max : Number) : void
+    {
+      var scale = Math.min(clip.stage.stageWidth/800,
+                           clip.stage.stageHeight/600);
+      scale = Math.max(scale, min);
+      scale = Math.min(scale, max);
+      clip.scaleX = scale;
+      clip.scaleY = scale;
+    }
   }
 }

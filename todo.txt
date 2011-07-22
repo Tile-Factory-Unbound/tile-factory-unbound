@@ -3,30 +3,46 @@ TODO
 ----
 
 New Maps (Need ~40)
-Pixel-based stencils, flip, invert
+Challenge badges
+Translations to Spanish/French/German. Other languages?
+
+-----
+Major
+-----
+
+Integrate with a level management system
+* Distinguish between solutions and levels. Dual-load all the time.
+* Load levels/solutions using URLs
+New stencil interface
+* flip, invert parts
 Locks (Red Zones)
 Barriers impermiable inside locks
-Always-on Play tab
-Add a 'Super-fast-forward' button
+Select square then move/delete
+
+-----
+Minor
+-----
+
 Hotkeys for tabs/parts
 Hotkey for play/stop
-Challenge badges
+
 Display time/part/item/breakage during play
-Integrate with a level management system
-Distinguish between solutions and levels. Dual-load all the time.
-Load levels/solutions using URLs
-Select square then move/delete
-New Parts: Breakpoint (pauses simulation when powered), Lever (click to toggle power while playing), Light Bulb (whole-tile power indicator), Random (on 50% of time when input is powered, off otherwise), Label (reveals custom text on mouseover)
 Show current wires on parts when mousing over or moving them even when not in wires mode
 Display wire count
-Translations to Spanish/French/German. Other languages?
-Place any color paint
-Simulation continues even with victory screen up
 Track display issues
+Show name when loading map/in menu/etc.
+Add desert borders
+
+New Parts: Breakpoint (pauses simulation when powered), Lever (click to toggle power while playing), Light Bulb (whole-tile power indicator), Random (on 50% of time when input is powered, off otherwise), Label (reveals custom text on mouseover)
+
+Place any color paint
 Ungroup disconnected tiles when using solvent.
 Fix circular wires when either source or dest is mem.
-Show name when loading map/in menu/etc.
 Fix ordering
+Fix tutorial arrows
+
+Fix victory screen
+Simulation continues even with victory screen up
 
 -----
 MAYBE
@@ -52,4 +68,7 @@ DONE
 Drag Scrolling, hotkeys for scrolling
 New Color System
 Allow larger window sizes
-
+Always-on Play tab
+Add a 'Super-fast-forward' button
+Make wires reappear when stopping on wires tab.
+Pixel-based stencils

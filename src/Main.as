@@ -9,6 +9,7 @@ package
   import lib.ui.Keyboard;
   import ui.RegionList;
   import ui.Sound;
+  import ui.TilePixel;
 
   public class Main
   {
@@ -34,6 +35,7 @@ package
         Sound.playMusic();
         root = parent;
         keyboard = new lib.ui.Keyboard(root.stage);
+        ui.TilePixel.setupRegions();
         ui.RegionList.setupRegions();
         settings = new GameSettings(new lib.Point(25, 25));
         state = new MainMenu(root, settings, beginGame, keyboard);
@@ -73,7 +75,7 @@ package
 
     static function resize() : void
     {
-      state.resize(root.stage.stageWidth, root.stage.stageHeight);
+      state.resize();
     }
 
     static var root : DisplayObjectContainer;

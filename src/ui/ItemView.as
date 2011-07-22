@@ -62,7 +62,7 @@ package ui
       item.setPos(pos);
     }
 
-    public function updateColor(color : RegionList) : void
+    public function updateColor(color : TilePixel) : void
     {
       item.setRegion(color);
     }

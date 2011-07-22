@@ -232,12 +232,12 @@ package ui
       }
     }
 
-    public function getTileColor() : RegionList
+    public function getTileColor() : TilePixel
     {
       return currentGoal.getTile(currentTile);
     }
 
-    public function setTileColor(newColor : RegionList) : void
+    public function setTileColor(newColor : TilePixel) : void
     {
       currentGoal.changeTile(currentTile, newColor);
     }

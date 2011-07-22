@@ -85,7 +85,7 @@ package
       menu.parent.removeChild(menu);
     }
 
-    public function resize(stageX : int, stageY : int) : void
+    public function resize() : void
     {
       Screen.center(menu.start, Screen.size);
       Screen.center(menu.paste, Screen.size);

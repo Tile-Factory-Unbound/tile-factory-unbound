@@ -16,12 +16,12 @@ package ui
   import ui.menu.ButtonMenu;
   import ui.menu.EditMenu;
   import ui.menu.GoalMenu;
+  import ui.menu.MovieMenu;
+  import ui.menu.PartMenu;
+  import ui.menu.SystemMenu;
+  import ui.menu.TestMenu;
   import ui.menu.TileMenu;
   import ui.menu.VictoryMenu;
-  import ui.menu.PartMenu;
-
-  import ui.menu.MovieMenu;
-  import ui.menu.SystemMenu;
 
   public class View
   {
@@ -50,7 +50,8 @@ package ui
       goalPlace = new GoalPlace(parent, window, images);
       tabs = new TabList(parent, window, goalPlace, wirePlace, wireParent);
       movieMenu = new MovieMenu(parent, window);
-      partPlace = new PartPlace(parent, keyboard, window);
+      testMenu = new TestMenu(parent, goalPlace, tabs);
+      partPlace = new PartPlace(parent, keyboard, window, testMenu);
       scrollMenu = new ScrollMenu(parent, window, keyboard, true);
       tip = new ToolTipClip();
       parent.addChild(tip);
@@ -68,8 +69,9 @@ package ui
       systemMenu.cleanup();
       tip.parent.removeChild(tip);
       scrollMenu.cleanup();
-      tabs.cleanup();
+      testMenu.cleanup();
       movieMenu.cleanup();
+      tabs.cleanup();
       goalPlace.cleanup();
       wireParent.cleanup();
       wirePlace.cleanup();
@@ -85,6 +87,7 @@ package ui
                                     parent.stage.stageHeight));
       movieMenu.resize();
       systemMenu.resize();
+      testMenu.resize();
     }
 
     public function enterFrame() : void
@@ -107,7 +110,7 @@ package ui
 
     public function startPlay() : void
     {
-      wireParent.startPlay();
+      wireParent.showPlay();
       if (settings.isMovie())
       {
         partPlace.hide();
@@ -117,7 +120,18 @@ package ui
 
     public function stopPlay() : void
     {
-      wireParent.stopPlay();
+      wireParent.hidePlay();
+      tabs.refreshMenu();
+    }
+
+    public function showWires() : void
+    {
+      wireParent.showPlay();
+    }
+
+    public function hideWires() : void
+    {
+      wireParent.hidePlay();
     }
 
     public function declareVictory() : void
@@ -171,6 +185,7 @@ package ui
       partPlace.setModel(changes, map, settings.isEditor(), tabs.setMenu);
       wirePlace.setModel(changes, map, tabs.getWireText(), wireParent);
       movieMenu.setModel(settings, endGame, saveMap);
+      testMenu.setModel(changes, partPlace, settings, saveMap);
       goalPlace.setModel(goals, map, tabs.refreshMenu);
       tabs.setModel(settings, changes, map, forEachPart, endGame, saveMap,
                     partPlace, countParts, countSteps, countCreated,
@@ -192,7 +207,8 @@ package ui
     var wirePlace : WirePlace;
     var wireParent : WireParent;
     var goalPlace : GoalPlace;
-    var movieMenu : ui.menu.MovieMenu;
+    var movieMenu : MovieMenu;
+    var testMenu : TestMenu;
     var tabs : TabList;
     var scrollMenu : ScrollMenu;
     var systemMenu : ui.menu.SystemMenu;

@@ -14,6 +14,7 @@ package ui.menu
   import ui.RegionList;
   import ui.Sound;
   import ui.TabList;
+  import ui.TilePixel;
   import ui.View;
 
   public class TileMenu extends TabMenu
@@ -163,8 +164,10 @@ package ui.menu
     override public function hide() : void
     {
       super.hide();
+/*
       window.resizeWindow(new Point(Main.WIDTH,
                                     Main.HEIGHT - View.MENU_HEIGHT));
+*/
       side.visible = false;
       if (partPlace != null)
       {
@@ -219,7 +222,7 @@ package ui.menu
       {
         testLeft = testColor;
         testRight = choice - BEGIN_PAINT;
-        testColor = RegionList.mix(testLeft, testRight);
+        testColor = TilePixel.mix(testLeft, testRight);
       }
       else
       {
@@ -239,7 +242,7 @@ package ui.menu
       }
       if (color == null)
       {
-        color = new RegionList();
+        color = new TilePixel();
         if (type == TILE_EDIT)
         {
           goalPlace.setTileColor(color);
@@ -285,8 +288,9 @@ package ui.menu
       updateTileView(color, side.tile);
     }
 
-    function updateTileView(color : RegionList, canvas : TileZoomClip) : void
+    function updateTileView(color : TilePixel, canvas : TileZoomClip) : void
     {
+/*
       if (color != null)
       {
         canvas.stencil.visible = true;
@@ -297,6 +301,7 @@ package ui.menu
         canvas.stencil.visible = false;
         canvas.draw.graphics.clear();
       }
+*/
     }
 
     function updateTest() : void
@@ -330,7 +335,7 @@ package ui.menu
       }
     }
 
-    function applyStencil(color : RegionList, stencilMask : int) : void
+    function applyStencil(color : TilePixel, stencilMask : int) : void
     {
       var stencil = new RegionList();
       stencil.addStencil(stencilMask);
@@ -340,7 +345,9 @@ package ui.menu
         dir = dir.clockwise();
         stencil.clockwise();
       }
-      color.addStencil(stencil.getStencil());
+      var stencilPixel = new TilePixel();
+      stencilPixel.convertFrom(stencil);
+      color.addStencil(stencilPixel.getStencil());
     }
 
     var goalPlace : ui.GoalPlace;
@@ -355,6 +362,6 @@ package ui.menu
     var testColor : int;
     var testLeft : int;
     var testRight : int;
-    var testTile : RegionList;
+    var testTile : TilePixel;
   }
 }

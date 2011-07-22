@@ -6,8 +6,8 @@ package logic
 
   import logic.change.ChangeItem;
 
-  import ui.RegionList;
   import ui.GoalTileView;
+  import ui.TilePixel;
 
   public class GoalTile
   {
@@ -16,7 +16,7 @@ package logic
     {
       sprite = newSprite;
       pos = newPos.clone();
-      color = new RegionList();
+      color = new TilePixel();
       sprite.updateColor(color);
     }
 
@@ -50,12 +50,12 @@ package logic
       return pos;
     }
 
-    public function getColor() : RegionList
+    public function getColor() : TilePixel
     {
       return color.clone();
     }
 
-    public function changeColor(newColor : RegionList) : void
+    public function changeColor(newColor : TilePixel) : void
     {
       color.copyFrom(newColor);
       sprite.updateColor(color);
@@ -69,6 +69,6 @@ package logic
 
     var sprite : ui.GoalTileView;
     var pos : lib.Point;
-    var color : ui.RegionList;
+    var color : ui.TilePixel;
   }
 }

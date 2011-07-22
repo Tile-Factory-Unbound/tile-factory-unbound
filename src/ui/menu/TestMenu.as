@@ -1,6 +1,8 @@
 package ui.menu
 {
   import flash.display.DisplayObjectContainer;
+  import flash.display.InteractiveObject;
+  import flash.geom.ColorTransform;
   import lib.ChangeList;
   import lib.Util;
   import lib.ui.ButtonList;
@@ -10,32 +12,40 @@ package ui.menu
   import ui.Sound;
   import ui.TabList;
 
-  public class TestMenu extends TabMenu
+  public class TestMenu
   {
     static var STOP = 0;
     static var PLAY = 1;
     static var FAST = 2;
     static var PAUSE = 3;
     static var STEP = 4;
+    static var TURBO = 5;
 
     public function TestMenu(parent : DisplayObjectContainer,
-                             setMenu : Function,
-                             newGoalPlace : GoalPlace) : void
+                             newGoalPlace : GoalPlace,
+                             newTabs : TabList) : void
     {
-      clip = new TestMenuClip();
+      clip = new PlayMenuClip();
+      parent.addChild(clip);
       goalPlace = newGoalPlace;
+      tabs = newTabs;
       setState(STOP);
-      super(parent, clip, setMenu, TabList.TEST_MENU);
       buttons = new ButtonList([clip.stopButton, clip.playButton,
                                 clip.fastButton, clip.pauseButton,
-                                clip.stepButton]);
+                                clip.stepButton, clip.turboButton]);
       buttons.setActions(click, buttons.glowOver, buttons.glowOut);
     }
 
-    override public function cleanup() : void
+    public function cleanup() : void
     {
       buttons.cleanup();
-      super.cleanup();
+      clip.parent.removeChild(clip);
+    }
+
+    public function resize() : void
+    {
+      Screen.stretchSquare(clip, 1.0, 2.0);
+      Screen.right(clip, null);
     }
 
     public function setModel(newChanges : ChangeList,
@@ -49,57 +59,68 @@ package ui.menu
       saveMap = newSaveMap;
     }
 
-    override public function show() : void
+    public function show() : void
     {
-      super.show();
-      goalPlace.hide();
-      partPlace.hide();
-      if (settings.getId() != null)
-      {
-        Campaign.saveLevel(settings.getId(), saveMap());
-      }
+      clip.visible = true;
     }
 
-    override public function hide() : void
+    public function hide() : void
     {
-      super.hide();
-      if (state != STOP)
-      {
-        changes.add(Util.makeChange(ChangeWorld.togglePlay));
-        setState(STOP);
-      }
-      goalPlace.show();
-      if (partPlace != null)
-      {
-        partPlace.show();
-      }
+      clip.visible = false;
     }
 
     function setState(newState : int) : void
     {
       state = newState;
-      clip.status.text = stateText[state];
       if (state == STOP)
       {
-        enableButtons([clip.playButton, clip.fastButton, clip.stepButton]);
-        disableButtons([clip.stopButton, clip.pauseButton]);
+        activeButton(clip.stopButton);
+        enableButtons([clip.playButton, clip.fastButton, clip.stepButton,
+                       clip.turboButton]);
+        disableButtons([clip.pauseButton]);
       }
       else if (state == PLAY)
       {
-        enableButtons([clip.stopButton, clip.fastButton, clip.pauseButton]);
-        disableButtons([clip.playButton, clip.stepButton]);
+        activeButton(clip.playButton);
+        enableButtons([clip.stopButton, clip.fastButton, clip.pauseButton,
+                       clip.turboButton]);
+        disableButtons([clip.stepButton]);
       }
       else if (state == FAST)
       {
-        enableButtons([clip.playButton, clip.stopButton, clip.pauseButton]);
-        disableButtons([clip.fastButton, clip.stepButton]);
+        activeButton(clip.fastButton);
+        enableButtons([clip.playButton, clip.stopButton, clip.pauseButton,
+                       clip.turboButton]);
+        disableButtons([clip.stepButton]);
       }
       else if (state == PAUSE)
       {
-        enableButtons([clip.playButton, clip.stopButton,
-                       clip.fastButton, clip.stepButton]);
-        disableButtons([clip.pauseButton]);
+        activeButton(clip.pauseButton);
+        enableButtons([clip.playButton, clip.stopButton, clip.fastButton,
+                       clip.stepButton, clip.turboButton]);
       }
+      else if (state == TURBO)
+      {
+        activeButton(clip.turboButton);
+        enableButtons([clip.playButton, clip.stopButton, clip.pauseButton,
+                       clip.fastButton]);
+        disableButtons([clip.stepButton]);
+      }
+    }
+
+    function activeButton(good : InteractiveObject) : void
+    {
+      for each (var bad in [clip.stopButton, clip.playButton, clip.fastButton,
+                            clip.pauseButton, clip.stepButton,
+                            clip.turboButton])
+      {
+        bad.transform.colorTransform = new ColorTransform(1.0, 1.0, 1.0, 1.0,
+                                                          0, 0, 0, 0);
+      }
+      good.transform.colorTransform = new ColorTransform(0.6, 1.8, 0.6, 1.0,
+                                                         0, 50, 0, 0);
+      good.mouseEnabled = false;
+      good.alpha = 1;
     }
 
     function enableButtons(good : Array) : void
@@ -120,21 +141,36 @@ package ui.menu
       }
     }
 
+    function starting() : void
+    {
+      if (settings.getId() != null)
+      {
+        Campaign.saveLevel(settings.getId(), saveMap());
+      }
+      tabs.hide();
+    }
+
+    function stopping() : void
+    {
+      tabs.show();
+    }
+
     function click(choice : int) : void
     {
       if (choice == STOP)
       {
+        stopping();
         changes.add(Util.makeChange(ChangeWorld.togglePlay));
         setState(STOP);
-        setMenu(TabList.PART_MENU);
       }
       else if (choice == PLAY)
       {
         if (state == STOP)
         {
+          starting();
           changes.add(Util.makeChange(ChangeWorld.togglePlay));
         }
-        else if (state == FAST)
+        else if (state == FAST || state == TURBO)
         {
           changes.add(Util.makeChange(ChangeWorld.slowPlay));
         }
@@ -148,6 +184,7 @@ package ui.menu
       {
         if (state == STOP)
         {
+          starting();
           changes.add(Util.makeChange(ChangeWorld.togglePlay));
         }
         if (state == PAUSE)
@@ -166,16 +203,31 @@ package ui.menu
       {
         if (state == STOP)
         {
+          starting();
           changes.add(Util.makeChange(ChangeWorld.togglePlay));
           changes.add(Util.makeChange(ChangeWorld.pausePlay));
           setState(PAUSE);
         }
         changes.add(Util.makeChange(ChangeWorld.stepPlay));
       }
+      else if (choice == TURBO)
+      {
+        if (state == STOP)
+        {
+          starting();
+          changes.add(Util.makeChange(ChangeWorld.togglePlay));
+        }
+        if (state == PAUSE)
+        {
+          changes.add(Util.makeChange(ChangeWorld.resumePlay));
+        }
+        changes.add(Util.makeChange(ChangeWorld.turboPlay));
+        setState(TURBO);
+      }
       Sound.play(Sound.SELECT);
     }
 
-    var clip : TestMenuClip;
+    var clip : PlayMenuClip;
     var buttons : lib.ui.ButtonList;
     var changes : lib.ChangeList;
     var state : int;
@@ -183,7 +235,6 @@ package ui.menu
     var partPlace : PartPlace;
     var settings : GameSettings;
     var saveMap : Function;
-
-    var stateText = ["Stopped", "Playing", "Fast", "Paused", "Error"];
+    var tabs : TabList;
   }
 }

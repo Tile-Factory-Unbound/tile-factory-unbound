@@ -6,9 +6,9 @@ package logic
   import lib.ChangeList;
   import lib.Point;
 
-  import ui.RegionList;
   import ui.GoalView;
   import ui.Sound;
+  import ui.TilePixel;
 
   public class Goal
   {
@@ -77,7 +77,7 @@ package logic
       }
     }
 
-    public function getTile(pos : Point) : RegionList
+    public function getTile(pos : Point) : TilePixel
     {
       var result = null;
       var index = findTile(pos);
@@ -88,7 +88,7 @@ package logic
       return result;
     }
 
-    public function changeTile(pos : Point, color : RegionList) : void
+    public function changeTile(pos : Point, color : TilePixel) : void
     {
       var index = findTile(pos);
       if (index != -1)

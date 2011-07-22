@@ -142,6 +142,8 @@ package ui.menu
         {
           var mapPixel = Map.toCenterPixel(mapPos);
           dest = window.toRelative(mapPixel);
+          dest.x -= clip.x;
+          dest.y -= clip.y;
         }
         var source = new Point(400, 50);
         var diff = new Point(source.x - dest.x, source.y - dest.y);
