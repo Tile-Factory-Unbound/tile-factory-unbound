@@ -13,7 +13,9 @@ package ui.menu
   import ui.PartPlace;
   import ui.RegionList;
   import ui.Sound;
+  import ui.StencilButtons;
   import ui.TabList;
+  import ui.TileDisplay;
   import ui.TilePixel;
   import ui.View;
 
@@ -42,6 +44,8 @@ package ui.menu
       parent.addChild(side);
       parent.setChildIndex(side, 0);
       side.visible = false;
+      tileView = new TileDisplay(side.tile, null, true, false);
+      testView = new TileDisplay(side.test, null, true, false);
       var index = TabList.TILE_MENU;
       if (type == TILE_LAB)
       {
@@ -82,7 +86,8 @@ package ui.menu
                             clip.p.b15,
                             clip.p.s0, clip.p.s1, clip.p.s2,
                             clip.p.s3, clip.p.s4, clip.p.s5,
-                            clip.p.clockwise, clip.p.counter];
+                            clip.p.clockwise, clip.p.counter,
+                            clip.p.flip, clip.p.flipv, clip.p.invert];
       tileButtons = new ButtonList(tileButtonList);
       tileButtons.setActions(tileClick, tileButtons.glowOver,
                              tileButtons.glowOut);
@@ -96,14 +101,19 @@ package ui.menu
         tileButtonList[i].gotoAndStop(i + 4 - BEGIN_STENCIL);
       }
       tileButtonList[SOLVENT].gotoAndStop(2);
-      stencilDir = Dir.east;
     }
 
     override public function cleanup() : void
     {
+      if (stencilList != null)
+      {
+        stencilList.cleanup();
+      }
       side.parent.removeChild(side);
       buttons.cleanup();
       tileButtons.cleanup();
+      tileView.cleanup();
+      testView.cleanup();
       super.cleanup();
     }
 
@@ -114,7 +124,8 @@ package ui.menu
     }
 
     public function setModel(newPartPlace : PartPlace,
-                             buttonStatus : ButtonStatus) : void
+                             buttonStatus : ButtonStatus,
+                             stencilColors : Array) : void
     {
       partPlace = newPartPlace;
       if (type == COLOR_LAB)
@@ -124,6 +135,8 @@ package ui.menu
           clip.visible = false;
         }
       }
+      stencilList = new StencilButtons([clip.p.s0, clip.p.s1, clip.p.s2,
+                                        clip.p.s3, clip.p.s4], stencilColors);
     }
 
     override public function show() : void
@@ -159,6 +172,7 @@ package ui.menu
       }
       partPlace.hide();
       goalPlace.toggleGoalHeight();
+      stencilList.reset();
     }
 
     override public function hide() : void
@@ -202,6 +216,9 @@ package ui.menu
     static var SOLVENT = 21;
     static var CLOCKWISE = 22;
     static var COUNTER = 23;
+    static var FLIP = 24;
+    static var FLIPV = 25;
+    static var INVERT = 26;
 
     function tileClick(choice : int) : void
     {
@@ -254,7 +271,7 @@ package ui.menu
       }
       else if (choice >= BEGIN_STENCIL && choice < END_STENCIL)
       {
-        applyStencil(color, RegionList.stencils[choice - BEGIN_STENCIL]);
+        applyStencil(color, choice - BEGIN_STENCIL);
       }
       else if (choice == SOLVENT)
       {
@@ -262,13 +279,23 @@ package ui.menu
       }
       else if (choice == CLOCKWISE)
       {
-        stencilDir = stencilDir.clockwise();
-        updateStencils();
+        stencilList.clockwise();
       }
       else if (choice == COUNTER)
       {
-        stencilDir = stencilDir.counter();
-        updateStencils();
+        stencilList.counter();
+      }
+      else if (choice == FLIP)
+      {
+        stencilList.flip(false);
+      }
+      else if (choice == FLIPV)
+      {
+        stencilList.flip(true);
+      }
+      else if (choice == INVERT)
+      {
+        stencilList.invert();
       }
       if (type == TILE_EDIT)
       {
@@ -285,30 +312,14 @@ package ui.menu
     function updateTile() : void
     {
       var color = goalPlace.getTileColor();
-      updateTileView(color, side.tile);
-    }
-
-    function updateTileView(color : TilePixel, canvas : TileZoomClip) : void
-    {
-/*
-      if (color != null)
-      {
-        canvas.stencil.visible = true;
-        color.drawRegions(canvas.draw.graphics, 0, 300);
-      }
-      else
-      {
-        canvas.stencil.visible = false;
-        canvas.draw.graphics.clear();
-      }
-*/
+      tileView.reset(color);
     }
 
     function updateTest() : void
     {
       if (type == TILE_LAB)
       {
-        updateTileView(testTile, side.test);
+        testView.reset(testTile);
       }
       else if (type == COLOR_LAB)
       {
@@ -326,42 +337,26 @@ package ui.menu
       }
     }
 
-    function updateStencils() : void
-    {
-      for each (var stencil in [clip.p.s0, clip.p.s1, clip.p.s2, clip.p.s3,
-                                clip.p.s4])
-      {
-        stencil.rotation = stencilDir.toAngle();
-      }
-    }
-
     function applyStencil(color : TilePixel, stencilMask : int) : void
     {
-      var stencil = new RegionList();
-      stencil.addStencil(stencilMask);
-      var dir = Dir.east;
-      while (dir != stencilDir)
-      {
-        dir = dir.clockwise();
-        stencil.clockwise();
-      }
-      var stencilPixel = new TilePixel();
-      stencilPixel.convertFrom(stencil);
-      color.addStencil(stencilPixel.getStencil());
+      var stencil = stencilList.get(stencilMask).clone();
+      color.addStencil(stencil.getStencil());
     }
 
     var goalPlace : ui.GoalPlace;
     var window : lib.ui.Window;
     var clip : TileMenuClip;
     var side : TileMenuSide;
+    var tileView : TileDisplay;
+    var testView : TileDisplay;
     var buttons : lib.ui.ButtonList;
     var tileButtons : lib.ui.ButtonList;
-    var stencilDir : Dir;
     var partPlace : ui.PartPlace;
     var type : int;
     var testColor : int;
     var testLeft : int;
     var testRight : int;
     var testTile : TilePixel;
+    var stencilList : StencilButtons;
   }
 }

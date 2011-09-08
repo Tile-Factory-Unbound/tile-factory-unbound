@@ -18,7 +18,7 @@ package ui.menu
       goalPlace = newGoalPlace;
       super(parent, clip, false, false);
       buttons = new ButtonList([clip.counter, clip.power, clip.clockwise,
-                                clip.trash]);
+                                clip.lock, clip.trash]);
       buttons.setActions(click, buttons.glowOver, buttons.glowOut);
       clip.addEventListener(MouseEvent.MOUSE_MOVE, move);
     }
@@ -57,7 +57,8 @@ package ui.menu
     static var COUNTER = 0;
     static var POWER = 1;
     static var CLOCKWISE = 2;
-    static var TRASH = 3;
+    static var LOCK = 3;
+    static var TRASH = 4;
 
     function click(choice : int) : void
     {
@@ -72,6 +73,10 @@ package ui.menu
       else if (choice == CLOCKWISE)
       {
         partPlace.clockwise();
+      }
+      else if (choice == LOCK)
+      {
+        partPlace.lock();
       }
       else if (choice == TRASH)
       {

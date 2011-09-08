@@ -9,6 +9,7 @@ package ui.menu
   import ui.GoalPlace;
   import ui.PartPlace;
   import ui.Sound;
+  import ui.StencilButtons;
   import ui.TabList;
 
   public class ButtonMenu extends TabMenu
@@ -24,7 +25,8 @@ package ui.menu
                      clip.mem, clip.setButton,
                      clip.clear,
                      clip.conveyer, clip.barrier,
-                     clip.rotater, clip.sensor,
+                     clip.rotater, clip.flip, clip.invert,
+                     clip.sensor,
                      clip.sprayer, clip.mixer,
                      clip.copier,
                      clip.tile, clip.solvent,
@@ -42,14 +44,22 @@ package ui.menu
     }
 
     public function setModel(newStatus : logic.ButtonStatus,
-                             newPartPlace : PartPlace) : void
+                             newPartPlace : PartPlace,
+                             stencilColors : Array) : void
     {
       status = newStatus;
       partPlace = newPartPlace;
+      stencils = new StencilButtons([clip.triangle, clip.rectangle,
+                                     clip.smallCircle, clip.circle,
+                                     clip.bigCircle], stencilColors);
     }
 
     override public function cleanup() : void
     {
+      if (stencils != null)
+      {
+        stencils.cleanup();
+      }
       buttons.cleanup();
       super.cleanup();
     }
@@ -64,6 +74,7 @@ package ui.menu
       }
       partPlace.hide();
       goalPlace.hide();
+      stencils.reset();
     }
 
     override public function hide() : void
@@ -101,6 +112,7 @@ package ui.menu
     var status : logic.ButtonStatus;
     var partPlace : ui.PartPlace;
     var goalPlace : ui.GoalPlace;
+    var stencils : StencilButtons;
 
     static var onGlow = new GlowFilter(0x00cc00, 1.0, 10, 10, 3, 3);
     static var offGlow = new GlowFilter(0xcc0000, 1.0, 10, 10, 3, 3);

@@ -19,7 +19,8 @@ package logic.change
       if (model.getMap().canPlaceItem(pos))
       {
         var newSprite = new ItemView(type, pos, view.getImages());
-        var newItem = new logic.Item(type, pos, newSprite, isStart);
+        var newItem = new logic.Item(type, pos, newSprite, isStart,
+                                     model.getStencils());
         model.addItem(newItem);
       }
       else
@@ -85,9 +86,17 @@ package logic.change
         var next = model.getMap().getTile(Dir.step(pos, dir));
         if (current.item != null && next.itemNext == null)
         {
-          current.item.moveStarted();
-          next.itemNext = current.item;
-          current.item = null;
+          if (next.part == null || next.part.allowEntry())
+          {
+            current.item.moveStarted();
+            next.itemNext = current.item;
+            current.item = null;
+          }
+          else
+          {
+            model.getChanges().add(Util.makeChange(ChangeWorld.itemBlocked,
+                                                   Item.COLLISION, pos));
+          }
         }
         else
         {

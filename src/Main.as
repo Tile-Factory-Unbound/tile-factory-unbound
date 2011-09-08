@@ -1,6 +1,7 @@
 package
 {
   import flash.display.DisplayObjectContainer;
+  import flash.display.Stage;
   import flash.display.StageAlign;
   import flash.display.StageScaleMode;
   import flash.events.Event;
@@ -76,6 +77,11 @@ package
     static function resize() : void
     {
       state.resize();
+    }
+
+    public static function getStage() : Stage
+    {
+      return root.stage;
     }
 
     static var root : DisplayObjectContainer;

@@ -38,6 +38,7 @@ package ui
         anims.add(partAnim);
       }
       updatePower(spec.power);
+      updateLocked(spec.locked);
     }
 
     public function cleanup() : void
@@ -129,6 +130,18 @@ package ui
         {
           partAnim.paused = true;
         }
+      }
+    }
+
+    public function updateLocked(locked : Boolean) : void
+    {
+      if (locked)
+      {
+        part.setFilter(lockGlow);
+      }
+      else
+      {
+        part.setFilter(null);
       }
     }
 
@@ -237,18 +250,25 @@ package ui
                               ["MemClip"], ["SetClip"], ["ClearClip"],
                               ["ConveyerClip"], ["BarrierClip"],
                               ["RotaterClip", "CounterClip",
-                               "RotaterClip", "CounterClip"], ["SensorClip"],
+                               "RotaterClip", "CounterClip"],
+                              ["FlipVertClip", "FlipVertClip",
+                               "FlipClip", "FlipClip"],
+                              ["InvertClip"], ["SensorClip"],
                               ["SprayerClip"], ["MixerClip"],
                               ["CopierClip"],
                               ["TileClip"], ["SolventClip"], ["GlueClip"],
-                              ["TriangleMakerClip"], ["RectangleMakerClip"],
-                              ["SmallCircleMakerClip"], ["CircleMakerClip"],
-                              ["BigCircleMakerClip"],
+//                              ["TriangleMakerClip"], ["RectangleMakerClip"],
+//                              ["SmallCircleMakerClip"], ["CircleMakerClip"],
+//                              ["BigCircleMakerClip"],
+                              ["StencilBackground"], ["StencilBackground"],
+                              ["StencilBackground"], ["StencilBackground"],
+                              ["StencilBackground"],
                               ["WhiteClip"], ["CyanClip"], ["MagentaClip"],
                               ["YellowClip"], ["BlackClip"]];
 
     static var partFrames = [null, null, null, null, null, null,
                              new Anim(2, 17), null, new Anim(2, 17),
+                             new Anim(2, 17), new Anim(2, 17),
                              null, new Anim(2, 17), new Anim(2, 17),
                              new Anim(2, 17),
 
@@ -262,5 +282,6 @@ package ui
     }
 
     public static var glow = new GlowFilter(0xffff00, 0.8, 10, 10, 3, 3, true);
+    public static var lockGlow = new GlowFilter(0x0000ff, 0.8, 10, 10, 3, 3, true);
   }
 }

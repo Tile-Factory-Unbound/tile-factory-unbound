@@ -147,6 +147,42 @@ package logic.change
       }
     }
 
+    public static function flip(pos : Point, isVertical : Boolean,
+                                model : Model, view : View) : void
+    {
+      if (model.getMap().insideMap(pos))
+      {
+        var target = model.getMap().getTile(pos).item;
+        if (target != null && target.isStencil())
+        {
+          target.flip(isVertical);
+          var part = model.getMap().getTile(pos).part;
+          if (part != null)
+          {
+            part.beginOp(null);
+          }
+        }
+      }
+    }
+
+    public static function invert(pos : Point,
+                                  model : Model, view : View) : void
+    {
+      if (model.getMap().insideMap(pos))
+      {
+        var target = model.getMap().getTile(pos).item;
+        if (target != null && target.isStencil())
+        {
+          target.invert();
+          var part = model.getMap().getTile(pos).part;
+          if (part != null)
+          {
+            part.beginOp(null);
+          }
+        }
+      }
+    }
+
     public static function spray(pos : Point, dir : Dir,
                                  model : Model, view : View) : void
     {

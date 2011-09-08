@@ -21,6 +21,7 @@ package
     public static function loadMap(text : String, size : Point, parts : Array,
                                    wires : Array, goals : Array,
                                    buttonStatus : logic.ButtonStatus,
+                                   stencils : Array,
                                    setName : Function, loadType : int) : void
     {
       if (loadType == LOAD_ALL || loadType == LOAD_LEVEL)
@@ -58,7 +59,7 @@ package
         size.x = sizeX;
         size.y = sizeY;
       }
-      loadParts(stream, parts, buttonStatus, loadType);
+      loadParts(stream, parts, buttonStatus, loadType, version);
       loadWires(stream, wires, loadType);
       loadGoals(stream, goals, loadType, version);
       if (version > 0)
@@ -66,20 +67,34 @@ package
         var newStatus = stream.readUnsignedInt();
         if (loadType == LOAD_ALL || loadType == LOAD_LEVEL)
         {
+          if (version == 1)
+          {
+            newStatus = (newStatus & 0x1ff) |
+              ((newStatus & 0xfffffe00) << 2);
+            trace("Shifting");
+          }
           buttonStatus.setAllStatus(newStatus);
         }
+      }
+      if (version > 1)
+      {
+        loadStencils(stream, stencils);
       }
     }
 
     static function loadParts(stream : ByteArray, parts : Array,
                               buttonStatus : logic.ButtonStatus,
-                              loadType : int) : void
+                              loadType : int, version : int) : void
     {
       var count = stream.readUnsignedShort();
       var i = 0;
       for (; i < count; ++i)
       {
         var type = stream.readUnsignedByte();
+        if (version < 2 && type >= 9)
+        {
+          type += 2;
+        }
         var pos = loadPoint(stream);
         var dirPower = stream.readUnsignedByte();
         var dir = Dir.dirs[dirPower & 0x3];
@@ -92,6 +107,15 @@ package
         if ((dirPower & 0x8) == 0)
         {
           fixed = false;
+        }
+        var locked = true;
+        if ((dirPower & 0x10) == 0)
+        {
+          locked = false;
+        }
+        if (locked)
+        {
+          fixed = true;
         }
         var shouldLoad = (loadType == LOAD_ALL);
         if (! shouldLoad)
@@ -107,6 +131,7 @@ package
         {
           var newPart = new logic.PartSpec(type, pos, dir, power);
           newPart.fixed = fixed;
+          newPart.locked = locked;
           parts.push(newPart);
         }
         else
@@ -230,6 +255,22 @@ package
       }
     }
 
+    static function loadStencils(stream : ByteArray, stencils : Array) : void
+    {
+      var count = stream.readUnsignedByte();
+      if (count > GameSettings.STENCIL_COUNT)
+      {
+        count = GameSettings.STENCIL_COUNT;
+      }
+      var i = 0;
+      for (; i < count; ++i)
+      {
+        var color = new TilePixel();
+        color.loadStencil(stream);
+        stencils[i] = color;
+      }
+    }
+
     static function loadPoint(stream : ByteArray) : Point
     {
       var result = new Point(0, 0);
@@ -241,6 +282,7 @@ package
     public static function saveMap(size : Point, parts : Array,
                                    wires : Array, goals : Array,
                                    buttonStatus : logic.ButtonStatus,
+                                   stencils : Array,
                                    name : String) : String
     {
       var stream = new ByteArray();
@@ -251,6 +293,7 @@ package
       saveWires(stream, wires);
       saveGoals(stream, goals);
       stream.writeUnsignedInt(buttonStatus.getAllStatus());
+      saveStencils(stream, stencils);
       stream.compress();
       var line = Base64.encodeByteArray(stream);
       var lineList = [];
@@ -289,6 +332,16 @@ package
       for each (var goal in goals)
       {
         goal.save(stream);
+      }
+    }
+
+    static function saveStencils(stream : ByteArray, stencils : Array) : void
+    {
+      stream.writeByte(stencils.length);
+      var i = 0;
+      for (; i < stencils.length; ++i)
+      {
+        stencils[i].saveStencil(stream);
       }
     }
 

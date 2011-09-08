@@ -21,30 +21,32 @@ package logic
     public static var CONVEYER = 6;
     public static var BARRIER = 7;
     public static var ROTATER = 8;
-    public static var SENSOR = 9;
-    public static var SPRAYER = 10;
-    public static var MIXER = 11;
-    public static var COPIER = 12;
+    public static var FLIP = 9;
+    public static var INVERT = 10;
+    public static var SENSOR = 11;
+    public static var SPRAYER = 12;
+    public static var MIXER = 13;
+    public static var COPIER = 14;
 
-    public static var TILE = 13;
-    public static var SOLVENT = 14;
-    public static var GLUE = 15;
+    public static var TILE = 15;
+    public static var SOLVENT = 16;
+    public static var GLUE = 17;
 
-    public static var STENCIL_BEGIN = 16;
-    public static var TRIANGLE = 16;
-    public static var RECTANGLE = 17;
-    public static var SMALL_CIRCLE = 18;
-    public static var CIRCLE = 19;
-    public static var BIG_CIRCLE = 20;
-    public static var STENCIL_END = 21;
+    public static var STENCIL_BEGIN = 18;
+    public static var TRIANGLE = 18;
+    public static var RECTANGLE = 19;
+    public static var SMALL_CIRCLE = 20;
+    public static var CIRCLE = 21;
+    public static var BIG_CIRCLE = 22;
+    public static var STENCIL_END = 23;
 
-    public static var PAINT_BEGIN = 21;
-    public static var WHITE = 21;
-    public static var CYAN = 22;
-    public static var MAGENTA = 23;
-    public static var YELLOW = 24;
-    public static var BLACK = 25;
-    public static var PAINT_END = 26;
+    public static var PAINT_BEGIN = 23;
+    public static var WHITE = 23;
+    public static var CYAN = 24;
+    public static var MAGENTA = 25;
+    public static var YELLOW = 26;
+    public static var BLACK = 27;
+    public static var PAINT_END = 28;
 
     static var paintType = [0x0, 0x8, 0x4, 0x2, 0x1];
 
@@ -55,8 +57,8 @@ package logic
 
     public static function canRotate(type : int) : Boolean
     {
-      return type == CONVEYER || type == ROTATER || type == SPRAYER
-        || type == MIXER || type == COPIER
+      return type == CONVEYER || type == ROTATER || type == FLIP
+        || type == SPRAYER || type == MIXER || type == COPIER
         || (type >= STENCIL_BEGIN && type < STENCIL_END);
     }
 
@@ -122,7 +124,7 @@ package logic
     }
 
     public function modifyPart(newPos : Point, newDir : Dir,
-                               newPower : Boolean) : void
+                               newPower : Boolean, newLocked : Boolean) : void
     {
       // Change Dir
       dir = newDir;
@@ -147,6 +149,8 @@ package logic
       memPower = newPower;
       spec.power = newPower;
       sprite.updatePower(newPower);
+      spec.locked = newLocked;
+      sprite.updateLocked(newLocked);
     }
 
     public function show() : void
@@ -200,6 +204,11 @@ package logic
         || type == COPIER;
     }
 
+    public function allowEntry() : Boolean
+    {
+      return type != BARRIER || ! spec.locked;
+    }
+
     public function startPlay(changes : lib.ChangeList) : void
     {
       if (type >= TILE)
@@ -241,11 +250,24 @@ package logic
 
     public function stepRotater(changes : lib.ChangeList) : void
     {
-      if (power && type == ROTATER)
+      if (power)
       {
-        var isClockwise = (dir == Dir.east || dir == Dir.north);
-        changes.add(Util.makeChange(ChangePart.rotate, pos.clone(),
-                                    isClockwise));
+        if (type == ROTATER)
+        {
+          var isClockwise = (dir == Dir.east || dir == Dir.north);
+          changes.add(Util.makeChange(ChangePart.rotate, pos.clone(),
+                                      isClockwise));
+        }
+        else if (type == FLIP)
+        {
+          var isVertical = (dir == Dir.north || dir == Dir.south);
+          changes.add(Util.makeChange(ChangePart.flip, pos.clone(),
+                                      isVertical));
+        }
+        else if (type == INVERT)
+        {
+          changes.add(Util.makeChange(ChangePart.invert, pos.clone()));
+        }
       }
     }
 
@@ -307,11 +329,12 @@ package logic
         || type == MEM;
     }
 
-    public function canEndWire(source : lib.Point, map : Map) : Boolean
+    public function canEndWire(source : lib.Point, map : Map,
+                               isEditor : Boolean) : Boolean
     {
       var parent = map.getTile(source).part;
-      return parent != null && type != SENSOR && type != BARRIER && type < TILE
-        && ! hasChild(map, parent);
+      return parent != null && (! spec.locked || isEditor) && type != SENSOR
+        && type != BARRIER && type < TILE && ! hasChild(map, parent);
     }
 
     public function findWire(source : lib.Point) : Wire
@@ -550,6 +573,11 @@ package logic
     public function isPowered() : Boolean
     {
       return power;
+    }
+
+    public function isLocked() : Boolean
+    {
+      return spec.locked;
     }
 
     private var spec : PartSpec;

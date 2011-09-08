@@ -13,10 +13,6 @@ Major
 Integrate with a level management system
 * Distinguish between solutions and levels. Dual-load all the time.
 * Load levels/solutions using URLs
-New stencil interface
-* flip, invert parts
-Locks (Red Zones)
-Barriers impermiable inside locks
 Select square then move/delete
 
 -----
@@ -43,6 +39,8 @@ Fix tutorial arrows
 
 Fix victory screen
 Simulation continues even with victory screen up
+
+Dye Lab only has colors available on current map
 
 -----
 MAYBE
@@ -72,3 +70,9 @@ Always-on Play tab
 Add a 'Super-fast-forward' button
 Make wires reappear when stopping on wires tab.
 Pixel-based stencils
+
+New stencil interface
+* flip, invert parts
+Locks (Red Zones)
+Barriers impermiable inside locks
+

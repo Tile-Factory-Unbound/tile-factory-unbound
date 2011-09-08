@@ -14,12 +14,14 @@ package logic
       dir = newDir;
       power = newPower;
       fixed = false;
+      locked = false;
     }
 
     public function clone() : PartSpec
     {
       var result = new PartSpec(type, pos, dir, power);
       result.fixed = fixed;
+      result.locked = locked;
       return result;
     }
 
@@ -30,11 +32,15 @@ package logic
       var dirPower = dir.toIndex();
       if (power)
       {
-        dirPower = (dirPower | 0x4);
+        dirPower = (dirPower | 0x04);
       }
-      if (fixed)
+      if (fixed || locked)
       {
-        dirPower = (dirPower | 0x8);
+        dirPower = (dirPower | 0x08);
+      }
+      if (locked)
+      {
+        dirPower = (dirPower | 0x10);
       }
       stream.writeByte(dirPower);
     }
@@ -44,5 +50,6 @@ package logic
     public var dir : Dir;
     public var power : Boolean;
     public var fixed : Boolean;
+    public var locked : Boolean;
   }
 }

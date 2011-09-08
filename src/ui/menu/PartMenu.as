@@ -20,7 +20,8 @@ package ui.menu
       buttons = new ButtonList([clip.all, clip.some, clip.none,
                                 clip.mem, clip.setButton, clip.clear,
                                 clip.conveyer, clip.barrier,
-                                clip.rotater, clip.sensor,
+                                clip.rotater, clip.flip, clip.invert,
+                                clip.sensor,
                                 clip.sprayer, clip.mixer,
                                 clip.copier]);
       buttons.setActions(click, mouseOver, mouseOut);
@@ -44,7 +45,7 @@ package ui.menu
         var userButtons = [clip.all, clip.some, clip.none,
                            clip.mem, clip.setButton, clip.clear,
                            clip.conveyer, clip.barrier,
-                           clip.rotater, clip.sensor,
+                           clip.rotater, clip.flip, clip.invert, clip.sensor,
                            clip.sprayer, clip.mixer,
                            clip.copier];
         var i = 0;
@@ -108,7 +109,8 @@ package ui.menu
     var tip : ToolTipClip;
 
     static var partTitles = ["All", "Some", "None", "Memory", "Set", "Clear",
-                             "Conveyer", "Barrier", "Rotater", "Sensor",
+                             "Conveyer", "Barrier", "Rotater",
+                             "Flip", "Invert", "Sensor",
                              "Sprayer", "Mixer", "Copier"];
     static var partBlurbs = ["Powered only when ALL\ninput wires are on",
                              "Powered when ANY\ninput wires are on",
@@ -119,6 +121,8 @@ package ui.menu
                              "Pushes tiles in\na straight line",
                              "Stops conveyer\ntracks",
                              "Rotates tiles\nand stencils",
+                             "Flips stencils horizontally or vertically",
+                             "Inverts stencils",
                              "Turns on when a\ntile moves over it",
                              "Sprays paint, stencils, glue\nand solvent onto tiles",
                              "Mixes paint together\nto make new colors",

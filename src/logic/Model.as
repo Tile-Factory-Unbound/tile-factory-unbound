@@ -18,7 +18,7 @@ package logic
     {
       settings = newSettings;
       view = newView;
-      map = new Map(settings.getSize());
+      map = new Map(settings.getSize(), settings.isEditor());
       changes = new lib.ChangeList();
       parts = new Array();
       items = new Array();
@@ -34,7 +34,7 @@ package logic
       goals = new Array();
       view.setModel(settings, changes, map, saveMap, goals,
                     forEachPart, endGame, countParts, countSteps,
-                    getCreatedCount, getBrokenCount);
+                    getCreatedCount, getBrokenCount, settings.getStencils());
 
       settings.initMap(changes);
       for each (var spec in settings.getGoals())
@@ -490,10 +490,16 @@ package logic
       return createdCount - countItems();
     }
 
+    public function getStencils() : Array
+    {
+      return settings.getStencils();
+    }
+
     function saveMap() : String
     {
       return SaveLoad.saveMap(map.getSize(), specs, wires, goals,
-                              settings.getButtonStatus(), settings.getName());
+                              settings.getButtonStatus(),
+                              settings.getStencils(), settings.getName());
     }
 
     function countParts() : int

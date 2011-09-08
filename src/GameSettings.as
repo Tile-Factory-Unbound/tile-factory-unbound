@@ -7,6 +7,9 @@ package
   import logic.ButtonStatus;
   import logic.change.ChangePart;
 
+  import ui.RegionList;
+  import ui.TilePixel;
+
   public class GameSettings
   {
     public function GameSettings(newSize : lib.Point) : void
@@ -31,6 +34,8 @@ package
       goals = new Array();
       buttonStatus = new logic.ButtonStatus();
       unlocks = new Array();
+      stencils = new Array();
+      initStencils();
     }
 
     public function setEditor() : void
@@ -133,12 +138,17 @@ package
       return size;
     }
 
+    public function getStencils() : Array
+    {
+      return stencils;
+    }
+
     public function setMap(map : String, loadType : int) : void
     {
       try
       {
         SaveLoad.loadMap(map, size, parts, wires, goals, buttonStatus,
-                         setName, loadType);
+                         stencils, setName, loadType);
       }
       catch (e : Error)
       {
@@ -146,7 +156,7 @@ package
       }
     }
 
-    public function initMap(changes : ChangeList)
+    public function initMap(changes : ChangeList) : void
     {
       for each (var part in parts)
       {
@@ -158,6 +168,22 @@ package
       {
         changes.add(Util.makeChange(ChangePart.addWire, wire.source.clone(),
                                     wire.dest.clone()));
+      }
+    }
+
+    public static var STENCIL_COUNT = 5;
+
+    public function initStencils() : void
+    {
+      stencils = [];
+      var i = 0;
+      for (; i < STENCIL_COUNT; ++i)
+      {
+        var region = new RegionList();
+        region.addStencil(RegionList.stencils[i]);
+        var pixel = new TilePixel();
+        pixel.convertFrom(region);
+        stencils.push(pixel);
       }
     }
 
@@ -196,5 +222,6 @@ package
     var goals : Array;
     var buttonStatus : logic.ButtonStatus;
     var unlocks : Array;
+    var stencils : Array;
   }
 }

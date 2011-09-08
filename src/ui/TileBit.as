@@ -35,7 +35,7 @@ package ui
       var i : int = 0;
       for (; i < size; ++i)
       {
-        stream.writeUnsignedInt(bits[i]);
+        stream.writeInt(bits[i]);
       }
     }
 
@@ -44,7 +44,7 @@ package ui
       var i : int = 0;
       for (; i < size; ++i)
       {
-        bits[i] = stream.readUnsignedInt();
+        bits[i] = stream.readInt();
       }
     }
 
@@ -106,7 +106,7 @@ package ui
       var i : int = 0;
       for (; i < size; ++i)
       {
-        bits[i] = 0;
+        bits[i] = int(0);
       }
     }
 
@@ -138,16 +138,37 @@ package ui
       }
     }
 
+    public function flip(isVertical : Boolean) : void
+    {
+      var base : TileBit = clone();
+      var y : int = 0;
+      for (; y < dim; ++y)
+      {
+        var x : int = 0;
+        for (; x < dim; ++x)
+        {
+          if (isVertical)
+          {
+            setPos(x, dim-y-1, base.getPos(x, y));
+          }
+          else
+          {
+            setPos(dim-x-1, y, base.getPos(x, y));
+          }
+        }
+      }
+    }
+
     public function isEqual(other : TileBit) : Boolean
     {
       var result : Boolean = true;
       var i : int = 0;
       for (; i < size && result; ++i)
       {
-        if (i < size - 1)
+        if (i == size - 1)
         {
-          var mask = ((0x1 << (bitCount % 32)) - 1);
-          bits[size - 1] = bits[size-1] & mask;
+          var mask = ((0x1 << (bitCount % 32)) >> 1) - 1;
+//          bits[size - 1] = bits[size-1] & mask;
           result = ((bits[i] & mask) == (other.bits[i] & mask));
         }
         else

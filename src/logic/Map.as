@@ -34,8 +34,9 @@ package logic
                            offset.y * tileSize + size.y * halfTileSize);
     }
 
-    public function Map(size : Point) : void
+    public function Map(size : Point, newEditor : Boolean) : void
     {
+      isEditor = newEditor;
       tiles = new lib.Grid(maxSize);
       bounds = lib.Box.createSize(new lib.Point(0, 0), size);
       var maxBounds = lib.Box.createSize(new lib.Point(0, 0), maxSize);
@@ -137,7 +138,7 @@ package logic
     {
       return ! Point.isEqual(source, pos)&& insideMap(pos)
         && tiles.get(pos).part != null
-        && tiles.get(pos).part.canEndWire(source, this);
+        && tiles.get(pos).part.canEndWire(source, this, isEditor);
     }
 
     public function forEachInLine(pos : Point, dir : Dir, f : Function,
@@ -223,6 +224,7 @@ package logic
 
     var tiles : lib.Grid;
     var bounds : lib.Box;
+    var isEditor : Boolean;
 
     public static var minSize = new Point(7, 7);
     public static var maxSize = new Point(60, 60);

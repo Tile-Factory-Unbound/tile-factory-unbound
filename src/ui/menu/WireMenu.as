@@ -25,10 +25,11 @@ package ui.menu
     }
 
     public function setModel(newPartPlace : PartPlace,
-                             buttonStatus : ButtonStatus) : void
+                             buttonStatus : ButtonStatus,
+                             isEditor : Boolean) : void
     {
       partPlace = newPartPlace;
-      if (! buttonStatus.getStatus(ButtonStatus.WIRE_BUTTON))
+      if (! buttonStatus.getStatus(ButtonStatus.WIRE_BUTTON) && ! isEditor)
       {
         clip.visible = false;
       }

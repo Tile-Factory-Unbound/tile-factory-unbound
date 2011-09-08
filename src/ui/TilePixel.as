@@ -37,12 +37,22 @@ package ui
       stencil.save(stream);
     }
 
+    public function saveStencil(stream : ByteArray) : void
+    {
+      stencil.save(stream);
+    }
+
     public function load(stream : ByteArray) : void
     {
       cyan.load(stream);
       magenta.load(stream);
       yellow.load(stream);
       absorb.load(stream);
+      stencil.load(stream);
+    }
+
+    public function loadStencil(stream : ByteArray) : void
+    {
       stencil.load(stream);
     }
 
@@ -114,6 +124,12 @@ package ui
       return stencil;
     }
 
+    public function toggleStencil(x : int, y : int) : void
+    {
+      var index = x + y*TileBit.dim;
+      stencil.set(index, (~stencil.get(index)) & 0x1);
+    }
+
     public function solvent() : void
     {
       stencil.clear();
@@ -132,12 +148,16 @@ package ui
       stencil.set(index, 0x1);
     }
 
-    public function getScreenColor(index : int) : int
+    public function getScreenColor(index : int, isTile : Boolean) : int
     {
       var result : int = 0;
       if (isStencil(index))
       {
         result = stencilColor;
+      }
+      else if (! isTile)
+      {
+        result = 0x00000000;
       }
       else
       {
@@ -164,7 +184,17 @@ package ui
       stencil.counter();
     }
 
-    public function drawRegions(surface : BitmapData) : void
+    public function flip(isVertical : Boolean) : void
+    {
+      stencil.flip(isVertical);
+    }
+
+    public function invert() : void
+    {
+      stencil.invert();
+    }
+
+    public function drawRegions(surface : BitmapData, isTile : Boolean) : void
     {
       surface.lock();
       var y = 0;
@@ -173,8 +203,8 @@ package ui
         var x = 0;
         for (; x < TileBit.dim; ++x)
         {
-          var color = getScreenColor(x + y*TileBit.dim);
-          surface.setPixel(x, y, color);
+          var color : int = getScreenColor(x + y*TileBit.dim, isTile);
+          surface.setPixel32(x, y, color);
         }
       }
       surface.unlock();
@@ -223,23 +253,23 @@ package ui
     static var WHITE = 0;
     static var BLACK = 0x1;
 
-    static var stencilColor = 0xeeddcc//0x9d5148;
-    static var colorMap = [0xffffff, // White
-                           0x000000, // Black
-                           0xffff55, // Light Yellow
-                           0xaa5500, // Brown
-                           0xff55ff, // Light Magenta
-                           0xaa00aa, // Magenta
-                           0xff5555, // Light Red
-                           0xaa0000, // Red
-                           0x55ffff, // Light Cyan
-                           0x00aaaa, // Cyan
-                           0x55ff55, // Light Green
-                           0x00aa00, // Green
-                           0x5555ff, // Light Blue
-                           0x0000aa, // Blue
-                           0xaaaaaa, // Light Grey
-                           0x555555]; // Dark Grey
+    static var stencilColor : uint = 0xffeeddcc;//0x9d5148;
+    static var colorMap = [0xffffffff, // White
+                           0xff000000, // Black
+                           0xffffff55, // Light Yellow
+                           0xffaa5500, // Brown
+                           0xffff55ff, // Light Magenta
+                           0xffaa00aa, // Magenta
+                           0xffff5555, // Light Red
+                           0xffaa0000, // Red
+                           0xff55ffff, // Light Cyan
+                           0xff00aaaa, // Cyan
+                           0xff55ff55, // Light Green
+                           0xff00aa00, // Green
+                           0xff5555ff, // Light Blue
+                           0xff0000aa, // Blue
+                           0xffaaaaaa, // Light Grey
+                           0xff555555]; // Dark Grey
 
     static var regionToBit = new Array(RegionList.REGION_COUNT);
     static var regionToMask = new Array(RegionList.REGION_COUNT);

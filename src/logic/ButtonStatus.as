@@ -4,7 +4,7 @@ package logic
   {
     public function ButtonStatus() : void
     {
-      buttons = 0x4000fff
+      buttons = 0x10003fff
     }
 
     // Returns true if button is enabled.
@@ -30,6 +30,6 @@ package logic
 
     var buttons : int;
 
-    public static var WIRE_BUTTON = 26
+    public static var WIRE_BUTTON = 28;
   }
 }

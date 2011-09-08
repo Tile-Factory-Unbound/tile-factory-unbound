@@ -24,7 +24,8 @@ package logic
     public static var PAINT_END = 25;
 
     public function Item(newType : int, newPos : Point,
-                         newSprite : ui.ItemView, newIsStart : Boolean) : void
+                         newSprite : ui.ItemView, newIsStart : Boolean,
+                         stencils : Array) : void
     {
       type = newType;
       pos = newPos.clone();
@@ -48,23 +49,21 @@ package logic
       }
 
       color = new TilePixel();
-      if (isTile())
-      {
-        sprite.updateColor(color);
-      }
-      else
-      {
-        sprite.updateColor(null);
-      }
       if (isPaint())
       {
         color.setColor(0, type - PAINT_BEGIN);
       }
       else if (isStencil())
       {
-        var stencil = new RegionList();
-        stencil.addStencil(RegionList.stencils[type - STENCIL_BEGIN]);
-        color.convertFrom(stencil);
+        color = stencils[type - STENCIL_BEGIN].clone();
+      }
+      if (isTile() || isStencil())
+      {
+        sprite.updateColor(color);
+      }
+      else
+      {
+        sprite.updateColor(null);
       }
     }
 
@@ -124,15 +123,15 @@ package logic
           color.counter();
           dir = dir.counter();
         }
-        if (isTile())
+        if (isTile() || isStencil())
         {
           sprite.updateRotation(Dir.east);
           sprite.updateColor(color);
         }
-        else
-        {
-          sprite.updateRotation(dir);
-        }
+//        else
+//        {
+//          sprite.updateRotation(dir);
+//        }
       }
       if (group.hasForce())
       {
@@ -220,6 +219,24 @@ package logic
       {
         isRotating = true;
         isClockwise = newClockwise;
+      }
+    }
+
+    public function flip(newVertical : Boolean) : void
+    {
+      if (isStencil())
+      {
+        color.flip(newVertical);
+        sprite.updateColor(color);
+      }
+    }
+
+    public function invert() : void
+    {
+      if (isStencil())
+      {
+        color.invert();
+        sprite.updateColor(color);
       }
     }
 

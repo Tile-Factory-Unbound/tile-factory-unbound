@@ -179,7 +179,8 @@ package ui
                              countParts : Function,
                              countSteps : Function,
                              countCreated : Function,
-                             countBroken : Function)
+                             countBroken : Function,
+                             stencils : Array)
     {
       settings = newSettings;
       partPlace.setModel(changes, map, settings.isEditor(), tabs.setMenu);
@@ -189,7 +190,7 @@ package ui
       goalPlace.setModel(goals, map, tabs.refreshMenu);
       tabs.setModel(settings, changes, map, forEachPart, endGame, saveMap,
                     partPlace, countParts, countSteps, countCreated,
-                    countBroken, tip);
+                    countBroken, tip, stencils);
       border.setModel(scrollMenu.getVertical(), scrollMenu.getHorizontal(),
                       partPlace);
       window.scrollWindow(new Point(0, 0));

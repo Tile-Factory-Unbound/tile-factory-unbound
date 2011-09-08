@@ -7,6 +7,7 @@ package ui.menu
   import ui.GoalPlace;
   import ui.PartPlace;
   import ui.Sound;
+  import ui.StencilButtons;
   import ui.TabList;
 
   public class ItemMenu extends TabMenu
@@ -28,13 +29,18 @@ package ui.menu
 
     override public function cleanup() : void
     {
+      if (stencils != null)
+      {
+        stencils.cleanup();
+      }
       buttons.cleanup();
       super.cleanup();
     }
 
     public function setModel(newPartPlace : ui.PartPlace,
                              isEditor : Boolean,
-                             buttonStatus : ButtonStatus) : void
+                             buttonStatus : ButtonStatus,
+                             stencilColors : Array) : void
     {
       partPlace = newPartPlace;
       if (! isEditor)
@@ -62,6 +68,9 @@ package ui.menu
           clip.visible = false;
         }
       }
+      stencils = new StencilButtons([clip.triangle, clip.rectangle,
+                                     clip.smallCircle, clip.circle,
+                                     clip.bigCircle], stencilColors);
     }
 
     function click(choice : int) : void
@@ -75,6 +84,7 @@ package ui.menu
     {
       goalPlace.hide();
       super.show();
+      stencils.reset();
     }
 
     override public function hide() : void
@@ -87,5 +97,6 @@ package ui.menu
     var buttons : lib.ui.ButtonList;
     var goalPlace : ui.GoalPlace;
     var partPlace : ui.PartPlace;
+    var stencils : StencilButtons;
   }
 }

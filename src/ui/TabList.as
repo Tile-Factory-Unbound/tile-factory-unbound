@@ -10,11 +10,12 @@ package ui
   import ui.menu.ButtonMenu;
   import ui.menu.EditMenu;
   import ui.menu.GoalMenu;
+  import ui.menu.ItemMenu;
+  import ui.menu.PartMenu;
   import ui.menu.PlaceMenu;
+  import ui.menu.StencilMenu;
   import ui.menu.TileMenu;
   import ui.menu.VictoryMenu;
-  import ui.menu.PartMenu;
-  import ui.menu.ItemMenu;
   import ui.menu.WireMenu;
 
   public class TabList
@@ -41,9 +42,11 @@ package ui
                                   TileMenu.COLOR_LAB);
       tileLabMenu = new TileMenu(clip, window, goalPlace, setMenu,
                                  TileMenu.TILE_LAB);
+      stencilMenu = new StencilMenu(clip, setMenu);
       menuList = new MenuList([buttonMenu, editMenu, placeMenu, goalMenu,
                                tileMenu, victoryMenu, partMenu, itemMenu,
-                               wireMenu, colorLabMenu, tileLabMenu]);
+                               wireMenu, colorLabMenu, tileLabMenu,
+                               stencilMenu]);
     }
 
     public function cleanup() : void
@@ -56,7 +59,8 @@ package ui
     {
       for each (var current in [buttonMenu, editMenu, placeMenu, goalMenu,
                                 tileMenu, victoryMenu, partMenu, itemMenu,
-                                wireMenu, colorLabMenu, tileLabMenu])
+                                wireMenu, colorLabMenu, tileLabMenu,
+                                stencilMenu])
       {
         current.resize();
       }
@@ -73,22 +77,25 @@ package ui
                              countSteps : Function,
                              countCreated : Function,
                              countBroken : Function,
-                             tip : ToolTipClip)
+                             tip : ToolTipClip,
+                             stencils : Array)
     {
       partMenu.setModel(partPlace, settings.isEditor(),
                         settings.getButtonStatus(), tip);
       itemMenu.setModel(partPlace, settings.isEditor(),
-                        settings.getButtonStatus())
-      buttonMenu.setModel(settings.getButtonStatus(), partPlace);
+                        settings.getButtonStatus(), stencils)
+      buttonMenu.setModel(settings.getButtonStatus(), partPlace, stencils);
       editMenu.setModel(map, partPlace, settings, forEachPart);
       placeMenu.setModel(partPlace);
       victoryMenu.setModel(settings, endGame, partPlace,
                            countParts, countSteps, countCreated, countBroken);
-      wireMenu.setModel(partPlace, settings.getButtonStatus());
+      wireMenu.setModel(partPlace, settings.getButtonStatus(),
+                        settings.isEditor());
       goalMenu.setModel(partPlace);
-      tileMenu.setModel(partPlace, settings.getButtonStatus());
-      colorLabMenu.setModel(partPlace, settings.getButtonStatus());
-      tileLabMenu.setModel(partPlace, settings.getButtonStatus());
+      tileMenu.setModel(partPlace, settings.getButtonStatus(), stencils);
+      colorLabMenu.setModel(partPlace, settings.getButtonStatus(), stencils);
+      tileLabMenu.setModel(partPlace, settings.getButtonStatus(), stencils);
+      stencilMenu.setModel(partPlace, stencils);
       setMenu(PART_MENU);
       if (settings.isMovie())
       {
@@ -97,7 +104,7 @@ package ui
       if (settings.isEditor())
       {
         setupTabs([partMenu, itemMenu, wireMenu,
-                   editMenu, buttonMenu, goalMenu, tileMenu]);
+                   editMenu, buttonMenu, goalMenu, tileMenu, stencilMenu]);
         for each (var player in [colorLabMenu, tileLabMenu, victoryMenu])
         {
           player.disable();
@@ -174,6 +181,7 @@ package ui
     var wireMenu : ui.menu.WireMenu;
     var colorLabMenu : ui.menu.TileMenu;
     var tileLabMenu : ui.menu.TileMenu;
+    var stencilMenu : ui.menu.StencilMenu;
 
     public static var BUTTON_MENU = 0;
     public static var EDIT_MENU = 1;
@@ -186,9 +194,10 @@ package ui
     public static var WIRE_MENU = 8;
     public static var COLOR_LAB_MENU = 9;
     public static var TILE_LAB_MENU = 10;
+    public static var STENCIL_MENU = 11;
 
     public static var tabText = ["Buttons", "Map", "Place", "Goal", "Tile",
                                  "Victory", "Parts", "Items", "Wires",
-                                 "Dye Lab", "Tile Lab"];
+                                 "Dye Lab", "Tile Lab", "Stencils"];
   }
 }

@@ -50,7 +50,7 @@ package ui
       {
         if (region != null)
         {
-          region.drawRegions(regionClip.bitmapData);
+          region.drawRegions(regionClip.bitmapData, frame == 1);
         }
       }
       regionChanged = false;
@@ -62,17 +62,14 @@ package ui
       {
         super.updateFrame();
         regionClip.parent.removeChild(regionClip);
-        if (frame == 1)
-        {
-          image.addChild(regionClip);
-        }
+        image.addChild(regionClip);
       }
     }
 
     override protected function resetImage(window : Window) : void
     {
       super.resetImage(window);
-      data = new BitmapData(TileBit.dim, TileBit.dim, false);
+      data = new BitmapData(TileBit.dim, TileBit.dim, true, 0x00000000);
       regionClip = new Bitmap(data);
       regionClip.x = -(TileBit.dim/2);
       regionClip.y = -(TileBit.dim/2);

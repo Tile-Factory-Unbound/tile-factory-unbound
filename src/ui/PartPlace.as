@@ -122,6 +122,12 @@ package ui
           update();
         }
       }
+      else if (ch == "x" || ch == "X")
+      {
+        part.locked = ! part.locked;
+        used = true;
+        update();
+      }
       else if (code == flash.ui.Keyboard.BACKSPACE
                || code == flash.ui.Keyboard.DELETE)
       {
@@ -205,6 +211,7 @@ package ui
           part.dir = newSpec.dir;
           part.power = newSpec.power;
           part.fixed = newSpec.fixed;
+          part.locked = newSpec.locked;
           update();
           moveTarget.hide();
           moveTarget.removeAllTracks();
@@ -233,7 +240,7 @@ package ui
         map.untrackAll(mapPos);
         map.getTile(oldPos).part = null;
         map.getTile(mapPos).part = moveTarget;
-        moveTarget.modifyPart(mapPos, part.dir, part.power);
+        moveTarget.modifyPart(mapPos, part.dir, part.power, part.locked);
         moveTarget.show();
         moveTarget = null;
         map.retrackAll(mapPos);
@@ -274,10 +281,11 @@ package ui
     function togglePartPower(mapPos : Point) : void
     {
       var target = map.getTile(mapPos).part;
-      if (target != null)
+      if (target != null && (! target.isLocked() || isEditor))
       {
         map.untrackAll(mapPos);
-        target.modifyPart(mapPos, target.getDir(), ! target.isPowered());
+        target.modifyPart(mapPos, target.getDir(), ! target.isPowered(),
+                          target.isLocked());
         map.retrackAll(mapPos);
         Sound.play(Sound.MOUSE_OVER);
       }
@@ -391,6 +399,7 @@ package ui
         part.power = false;
       }
       part.fixed = isEditor;
+      part.locked = isEditor;
       update();
     }
 
@@ -421,6 +430,12 @@ package ui
       }
     }
 
+    public function lock() : void
+    {
+      part.locked = ! part.locked;
+      update();
+    }
+
     function update() : void
     {
       var x = parent.stage.mouseX;
@@ -448,6 +463,10 @@ package ui
         plan.rotation = part.dir.toAngle();
       }
       var filters = [];
+      if (part.locked)
+      {
+        filters.push(PartView.lockGlow);
+      }
       if (PartView.shouldGlow(part.type))
       {
         if (part.power)
