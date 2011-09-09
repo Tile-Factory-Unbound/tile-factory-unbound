@@ -33,7 +33,7 @@ package
       buttons = new lib.ui.ButtonList(buttonArray);
       buttons.setActions(click, buttons.frameOver, buttons.frameOut);
 
-      var glowArray = [menu.start.mute, menu.start.compLink];
+      var glowArray = [menu.start.mute];
       glowButtons = new lib.ui.ButtonList(glowArray);
       glowButtons.setActions(clickGlow, glowButtons.glowOver,
                              glowButtons.glowOut);
@@ -74,6 +74,10 @@ package
       {
         menu.start.mute.gotoAndStop(1);
       }
+
+      menu.start.playGame.visible = false;
+      menu.start.sandbox.visible = false;
+      menu.start.community.visible = false;
     }
 
     public function cleanup() : void
@@ -216,10 +220,6 @@ package
           menu.start.mute.gotoAndStop(1);
         }
         Campaign.save();
-      }
-      else if (choice == 1)
-      {
-        navigateToURL(new URLRequest("http://jayisgames.com/cgdc8"));
       }
       Sound.play(Sound.SELECT);
     }

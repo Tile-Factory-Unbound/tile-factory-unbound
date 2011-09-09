@@ -5,9 +5,10 @@ package ui
 
   public class Sound
   {
+    static var permamute = true;
     public static function play(index : int) : void
     {
-      if (! mute && channel == null)
+      if (! mute && channel == null && ! permamute)
       {
         var volume = 1;
         if (index == JAM)
@@ -41,7 +42,7 @@ package ui
 
     public static function playMusic() : void
     {
-      if (! mute && ! muteMusic)
+      if (! mute && ! muteMusic && ! permamute)
       {
         musicChannel = music.play(0, 1000000, new SoundTransform(1));
       }
