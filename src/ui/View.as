@@ -191,8 +191,7 @@ package ui
       tabs.setModel(settings, changes, map, forEachPart, endGame, saveMap,
                     partPlace, countParts, countSteps, countCreated,
                     countBroken, tip, stencils);
-      border.setModel(scrollMenu.getVertical(), scrollMenu.getHorizontal(),
-                      partPlace);
+      border.setModel(partPlace);
       window.scrollWindow(new Point(0, 0));
       systemMenu.setModel(endGame, saveMap, settings);
     }

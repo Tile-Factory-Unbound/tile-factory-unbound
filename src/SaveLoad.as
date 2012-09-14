@@ -71,7 +71,6 @@ package
           {
             newStatus = (newStatus & 0x1ff) |
               ((newStatus & 0xfffffe00) << 2);
-            trace("Shifting");
           }
           buttonStatus.setAllStatus(newStatus);
         }

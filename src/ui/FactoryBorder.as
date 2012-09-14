@@ -13,8 +13,6 @@ package ui
     public function FactoryBorder(newType : int) : void
     {
       type = newType;
-      vertical = [];
-      horizontal = [];
       super();
     }
 
@@ -42,11 +40,8 @@ package ui
       clip.y = - Map.tileSize;
     }
 
-    public function setModel(newVertical : Array, newHorizontal : Array,
-                             newPartPlace : PartPlace)
+    public function setModel(newPartPlace : PartPlace)
     {
-      vertical = newVertical;
-      horizontal = newHorizontal;
       partPlace = newPartPlace;
     }
 
@@ -84,41 +79,6 @@ package ui
       {
         eastClip.x = size.x + Map.tileSize;
       }
-
-      if (size.x < windowSize.x)
-      {
-        for each (var hclip in horizontal)
-        {
-          hclip.visible = false;
-        }
-      }
-      else
-      {
-        for each (var hclip2 in horizontal)
-        {
-          if (hclip2.visible == false)
-          {
-            hclip2.visible = true;
-          }
-        }
-      }
-      if (size.y < windowSize.y)
-      {
-        for each (var vclip in vertical)
-        {
-          vclip.visible = false;
-        }
-      }
-      else
-      {
-        for each (var vclip2 in vertical)
-        {
-          if (vclip2.visible == false)
-          {
-            vclip2.visible = true;
-          }
-        }
-      }
     }
 
     function mouseMove(event : MouseEvent) : void
@@ -149,8 +109,6 @@ package ui
     }
 
     var type : int;
-    var vertical : Array;
-    var horizontal : Array;
     var border : MovieClip;
     var partPlace : PartPlace;
     var children : Array;

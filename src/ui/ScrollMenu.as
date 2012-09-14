@@ -18,53 +18,22 @@ package ui
       keyboard = newKeyboard;
       dragOrigin = null;
       scrollDir = [];
-      clip = new ScrollMenuClip();
-      parent.addChild(clip);
-      buttons = new ButtonList([clip.north, clip.south,
-                                clip.east, clip.west]);
-      buttons.setActions(null, beginScroll, endScroll);
-      if (! hasMenu)
-      {
-        clip.south.y = Main.HEIGHT - 5;
-        clip.east.y = Main.HEIGHT / 2;
-        clip.west.y = Main.HEIGHT / 2;
-      }
-      clip.visible = false;
 
       window.addDragBeginCommand(dragBegin);
       window.addDragEndCommand(dragEnd);
       window.addDragMoveCommand(dragMove);
       keyboard.addHandler(hotkey);
       keyboard.addUpHandler(upHandler);
-/*
-      else
-      {
-        clip.south.y = Main.HEIGHT - View.MENU_HEIGHT - 30;
-      }
-*/
     }
 
     public function cleanup() : void
     {
       keyboard.removeUpHandler(upHandler);
       keyboard.removeHandler(hotkey);
-      buttons.cleanup();
-      clip.parent.removeChild(clip);
-    }
-
-    public function getVertical() : Array
-    {
-      return [clip.north, clip.south];
-    }
-
-    public function getHorizontal() : Array
-    {
-      return [clip.east, clip.west];
     }
 
     public function hide() : void
     {
-      clip.visible = false;
     }
 
     public function enterFrame() : void
@@ -73,18 +42,6 @@ package ui
       {
         window.scrollWindow(Dir.walk(new Point(0, 0), dir, INCREMENT));
       }
-    }
-
-    function beginScroll(choice : int) : void
-    {
-      buttons.glowOver(choice);
-      addDir(Dir.dirs[choice]);
-    }
-
-    function endScroll(choice : int) : void
-    {
-      buttons.glowOut(choice);
-      removeDir(Dir.dirs[choice]);
     }
 
     function dragBegin(pos : Point) : void
@@ -97,7 +54,6 @@ package ui
 
     function dragEnd(pos : Point) : void
     {
-//      dragMove(pos);
       dragOrigin = null;
     }
 
@@ -190,8 +146,6 @@ package ui
       }
     }
 
-    var clip : ScrollMenuClip;
-    var buttons : lib.ui.ButtonList;
     var window : lib.ui.Window;
     var keyboard : lib.ui.Keyboard;
     var dragOrigin : Point;

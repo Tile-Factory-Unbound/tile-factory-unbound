@@ -74,10 +74,6 @@ package
       {
         menu.start.mute.gotoAndStop(1);
       }
-
-      menu.start.playGame.visible = false;
-      menu.start.sandbox.visible = false;
-      menu.start.community.visible = false;
     }
 
     public function cleanup() : void
