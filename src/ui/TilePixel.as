@@ -81,6 +81,16 @@ package ui
       }
     }
 
+    public function fromStamp(stamp : Array) : void
+    {
+      cyan.clear();
+      magenta.clear();
+      yellow.clear();
+      absorb.clear();
+      stencil.clear();
+      addStencil(stampToBit(stamp));
+    }
+
     public function clone() : TilePixel
     {
       var result = new TilePixel();
@@ -226,6 +236,26 @@ package ui
     var absorb : TileBit;
     var stencil : TileBit;
 
+    public static function stampToBit(stamp : Array) : TileBit
+    {
+      var result = new TileBit();
+      var index = 0;
+      for each (var row in stamp)
+      {
+        var i = 0;
+        for (; i < row.length; ++i)
+        {
+          var bit = 0;
+          if (row.substr(i, 1) == "1")
+          {
+            bit = 1;
+          }
+          result.set(index, bit);
+          index = index + 1;
+        }
+      }
+      return result;
+    }
 
     public static function mix(left : int, right : int) : int
     {

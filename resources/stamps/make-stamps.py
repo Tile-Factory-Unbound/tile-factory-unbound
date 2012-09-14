@@ -56,10 +56,10 @@ print "package"
 print "{"
 print "  public class Stamps"
 print "  {"
-print "    public static var stamps = {"
+print "    public static var stamps = ["
 
 for file in filenames:
-  print "      {"
+  print "      ["
   image = Image.open(file)
   data = image.getdata();
 
@@ -77,9 +77,9 @@ for file in filenames:
       if i < len(data) - 1:
         sys.stdout.write("        \"")
     i = i + 1
-  print "      },";
+  print "      ],";
 
-print "    };"
+print "    ];"
 print "  }"
 print "}"
 

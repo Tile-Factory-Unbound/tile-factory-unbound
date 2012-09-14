@@ -5,9 +5,11 @@ package ui.menu
   import lib.ui.ButtonList;
   import ui.PartPlace;
   import ui.Sound;
+  import ui.StampButtons;
   import ui.StencilButtons;
   import ui.TabList;
   import ui.TileDisplay;
+  import ui.TilePixel;
 
   public class StencilMenu extends TabMenu
   {
@@ -33,10 +35,12 @@ package ui.menu
       editChoice = -1;
       tile = new TileDisplay(grid.grid, null, false, true);
       grid.visible = false;
+      stampManager = new StampButtons(clip.stamps, clickStamp);
     }
 
     override public function cleanup() : void
     {
+      stampManager.cleanup();
       if (stencilManager != null)
       {
         stencilManager.cleanup();
@@ -77,6 +81,7 @@ package ui.menu
         clip.applyButton.visible = false;
         clip.cancelButton.visible = false;
         grid.visible = false;
+        stampManager.hide();
       }
       else
       {
@@ -89,6 +94,7 @@ package ui.menu
         clip.cancelButton.visible = true;
         grid.visible = true;
         tile.reset(stencils[editChoice]);
+        stampManager.show();
       }
       partPlace.hide();
       stencilManager.reset();
@@ -103,6 +109,10 @@ package ui.menu
         partPlace.show();
       }
       editChoice = -1;
+      if (stampManager != null)
+      {
+        stampManager.hide();
+      }
     }
 
     static var APPLY = 0;
@@ -126,6 +136,11 @@ package ui.menu
       Sound.play(Sound.SELECT);
     }
 
+    function clickStamp(choice : TilePixel) : void
+    {
+      tile.reset(choice);
+    }
+
     var clip : StencilMenuClip;
     var grid : StencilMenuGrid;
     var buttons : ButtonList;
@@ -135,5 +150,6 @@ package ui.menu
     var partPlace : ui.PartPlace;
     var stencils : Array;
     var stencilManager : StencilButtons;
+    var stampManager : StampButtons;
   }
 }
