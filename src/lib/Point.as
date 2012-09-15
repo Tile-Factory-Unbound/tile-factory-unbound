@@ -1,3 +1,7 @@
+// Point.as
+//
+// A pair of integers, usually representing a position in a grid or a size.
+
 package lib
 {
   public class Point

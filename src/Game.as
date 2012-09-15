@@ -1,3 +1,10 @@
+// Game.as
+//
+// The main game object. This handles the main game actions, such as
+// winning/losing/etc. as well as containing the two main objects for
+// the game, a model for the internal logic and a view for the display
+// and UI.
+
 package
 {
   import flash.display.DisplayObjectContainer;

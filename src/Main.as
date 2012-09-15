@@ -1,3 +1,8 @@
+// Main.as
+//
+// Entry point from the flash code. Also keeps track of which main
+// menu and/or the game the player is interacting with.
+
 package
 {
   import flash.display.DisplayObjectContainer;

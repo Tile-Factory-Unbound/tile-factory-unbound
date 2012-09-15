@@ -1,3 +1,7 @@
+// Grid.as
+//
+// A two-dimensional array addressable using points.
+
 package lib
 {
   public class Grid

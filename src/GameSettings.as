@@ -1,3 +1,8 @@
+// GameSettings.as
+//
+// Settings to determine how the game should be played. This includes
+// the game mode and initial level state
+
 package
 {
   import lib.ChangeList;

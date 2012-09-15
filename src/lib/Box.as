@@ -1,3 +1,8 @@
+// Box.as
+//
+// A box is a rectangular axis-aligned rectangle of integer
+// dimensions. Usually,  it is a region on the map.
+
 package lib
 {
   public class Box

@@ -1,3 +1,7 @@
+// DList.as
+//
+// A custom doubly-linked list implementation.
+
 package lib
 {
   public class DList

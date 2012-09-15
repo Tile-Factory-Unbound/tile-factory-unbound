@@ -1,3 +1,7 @@
+// DIterator.as
+//
+// An iterator for a custom doubly-linked list implementation (see DList).
+
 package lib
 {
   public class DIterator

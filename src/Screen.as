@@ -1,3 +1,9 @@
+// Screen.as
+//
+// A global variable representing screen size. Includes a number of
+// utility functions to make it easy to resize or reposition things as
+// the screen size changes.
+
 package
 {
   import flash.display.DisplayObject;

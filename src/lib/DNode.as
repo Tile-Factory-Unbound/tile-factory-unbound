@@ -1,3 +1,7 @@
+// DNode.as
+//
+// A single node in a doubly-linked list
+
 package lib
 {
   public class DNode

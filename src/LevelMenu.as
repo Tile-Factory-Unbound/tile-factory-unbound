@@ -1,3 +1,8 @@
+// LevelMenu.as
+//
+// User interface for level select menus. These are presented as
+// scrollable maps for users with clickable factories.
+
 package
 {
   import flash.display.DisplayObjectContainer;

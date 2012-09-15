@@ -1,3 +1,7 @@
+// Util.as
+//
+// Miscellaneous utility functions
+
 package lib
 {
   public class Util

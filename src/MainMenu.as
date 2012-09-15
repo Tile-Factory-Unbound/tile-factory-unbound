@@ -1,3 +1,7 @@
+// MainMenu.as
+//
+// Provides UI for the starting main menu and the credits and paste menus.
+
 package
 {
   import flash.display.DisplayObjectContainer;

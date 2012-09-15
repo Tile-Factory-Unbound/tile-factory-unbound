@@ -1,3 +1,10 @@
+// ChangeList.as
+//
+// This is a list of functions which will be executed on the next
+// frame. Anything which changes non-local game state should be
+// implemented with a change function which is then pushed onto the
+// list.
+
 package lib
 {
   // Model and View must be defined in the client's namespace to use this class

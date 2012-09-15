@@ -1,3 +1,8 @@
+// Dir.as
+//
+// Constants representing directions and utility functions for using
+// and converting them.
+
 package
 {
   import lib.Box;

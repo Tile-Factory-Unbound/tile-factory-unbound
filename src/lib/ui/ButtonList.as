@@ -1,3 +1,10 @@
+// ButtonList.as
+//
+// Treat a set of MovieClips as buttons. Provide visual feedback on
+// mouseover either by changing the frame or adding a glow
+// filter. When one is clicked, execute a callback and pass in the
+// index of that button.
+
 package lib.ui
 {
   import flash.display.MovieClip;

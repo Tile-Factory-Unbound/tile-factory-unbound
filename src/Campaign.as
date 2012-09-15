@@ -1,3 +1,12 @@
+// Campaign.as
+//
+// Manages the internal state of the player's progress through the
+// campaign including which levels they have completed. Saves it all
+// in flash a flash cookie.
+//
+// Also contains the raw XML for the campaign levels and the functions
+// to parse it.
+
 package
 {
   import flash.events.AsyncErrorEvent;

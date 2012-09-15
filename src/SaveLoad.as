@@ -1,3 +1,8 @@
+// SaveLoad.as
+//
+// Utility functions for saving and loading levels and their pieces to
+// or from a string.
+
 package
 {
   import flash.utils.ByteArray;
